@@ -1,5 +1,6 @@
-export function levenshtein(a: string, b: string) {
+export function levenshtein(a: string, b: string): number {
   const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+
   for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
 
   for (let i = 1; i <= b.length; i++) {

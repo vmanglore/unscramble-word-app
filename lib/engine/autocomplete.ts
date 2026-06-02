@@ -1,32 +1,32 @@
-import signatureMap from "@/data/compiled/signatureMap.json";
+import startsWithMap from "@/data/compiled/startsWithMap.json";
 import { levenshtein } from "./fuzzy";
 
-const allWords = Object.values(signatureMap).flat();
+type WordMap = Record<string, string[]>;
 
-const wordList = Array.from(new Set(allWords)).map((w) =>
-  w.toLowerCase()
-);
+const prefixIndex = startsWithMap as WordMap;
 
-export function getSuggestions(query: string, limit = 10) {
+/**
+ * Fast autocomplete using precomputed index + lightweight refinement
+ */
+export function getSuggestions(query: string, limit = 10): string[] {
   const q = query.toLowerCase().trim();
-
   if (!q) return [];
 
-  // 1. prefix matches (fast path)
-  const prefixMatches = wordList.filter((w) => w.startsWith(q));
+  // 1. O(1) lookup from index
+  const candidates = prefixIndex[q] || [];
 
-  // 2. fuzzy matches (typo handling)
-  const fuzzyMatches = wordList
-    .map((w) => ({
-      word: w,
-      distance: levenshtein(q, w),
+  if (candidates.length === 0) return [];
+
+  // 2. Lightweight ranking (ONLY top N candidates, not full dataset)
+  const ranked = candidates
+    .slice(0, 200) // safety cap (prevents large compute)
+    .map((word) => ({
+      word,
+      score: levenshtein(q, word),
     }))
-    .filter((w) => w.distance <= 2)
-    .sort((a, b) => a.distance - b.distance)
-    .map((w) => w.word);
+    .sort((a, b) => a.score - b.score)
+    .map((x) => x.word);
 
-  // merge + dedupe
-  const combined = Array.from(new Set([...prefixMatches, ...fuzzyMatches]));
-
-  return combined.slice(0, limit);
+  // 3. merge (already mostly sorted, but safe dedupe)
+  return Array.from(new Set(ranked)).slice(0, limit);
 }

@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
-import { unscramble } from "@/lib/engine/unscrambleEngine";
+import { unscrambleLetters } from "@/lib/engine/unscrambleEngine";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const letters = searchParams.get("letters") || "";
 
-  const words = unscramble(letters);
+  const words = await unscrambleLetters(letters);
 
-  return NextResponse.json({ words });
+  return Response.json({ words });
 }

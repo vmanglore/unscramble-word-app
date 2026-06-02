@@ -1,11 +1,7 @@
-import signatureMap from "@/data/signatureMap.json";
-
-/**
- * Generates related SEO pages based on a pattern
- * Helps Google discover more pages (VERY important for ranking)
- */
 export function getRelatedPatterns(pattern: string) {
   const suggestions: string[] = [];
+
+  if (!pattern) return [];
 
   // Replace one character at a time with wildcard
   for (let i = 0; i < pattern.length; i++) {
@@ -25,7 +21,7 @@ export function getRelatedStarts(letter: string) {
 
   return alphabet
     .split("")
-    .filter(l => l !== letter)
+    .filter((l) => l !== letter)
     .slice(0, 5);
 }
 
@@ -33,5 +29,5 @@ export function getRelatedStarts(letter: string) {
  * Get related word lengths
  */
 export function getRelatedLengths(length: number) {
-  return [length - 1, length + 1, length + 2].filter(n => n > 1);
+  return [length - 1, length + 1, length + 2].filter((n) => n > 1);
 }

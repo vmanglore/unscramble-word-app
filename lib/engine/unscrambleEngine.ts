@@ -1,26 +1,36 @@
 import signatureMap from "@/data/compiled/signatureMap.json";
-console.log("signatureMap:", signatureMap);
-console.log("keys:", Object.keys(signatureMap));
+import { fetchWordsFromAPI } from "./wordApi";
 
-const map = new Map<string, string[]>(
-  Object.entries(signatureMap)
-);
+type SignatureMap = Record<string, string[]>;
 
-function normalize(input?: string) {
-  if (!input) return "";
-  return input.toLowerCase().replace(/[^a-z]/g, "");
-}
+const map = signatureMap as SignatureMap;
 
-function toKey(letters: string) {
-  return letters.split("").sort().join("");
-}
+// cache uses sorted letters (true lookup key)
+const cache = new Map<string, string[]>();
 
-export function unscramble(letters?: string): string[] {
-  const normalized = normalize(letters);
+export async function unscrambleLetters(letters: string): Promise<string[]> {
+  const cleaned = letters.toLowerCase().replace(/[^a-z]/g, "");
+  if (!cleaned) return [];
 
-  if (!normalized) return [];
+  const sorted = cleaned.split("").sort().join("");
 
-  const key = toKey(normalized);
+  // 1. cache
+  if (cache.has(sorted)) {
+    return cache.get(sorted)!;
+  }
 
-  return map.get(key) || [];
+  // 2. static lookup (FAST PATH)
+  const staticResult = map[sorted] ?? [];
+
+  if (staticResult.length > 0) {
+    cache.set(sorted, staticResult);
+    return staticResult;
+  }
+
+  // 3. API fallback (SLOW PATH)
+  const apiResult = await fetchWordsFromAPI(cleaned);
+
+  cache.set(sorted, apiResult);
+
+  return apiResult;
 }

@@ -3,20 +3,18 @@ import startsWithRaw from "@/data/compiled/startsWithMap.json";
 import endsWithRaw from "@/data/compiled/endsWithMap.json";
 import lengthRaw from "@/data/compiled/lengthMap.json";
 
-type MapType = Record<string, string[]>;
+type WordMap = Record<string, string[]>;
 
-// Cache objects (important for performance)
-const signatureMap: MapType = signatureMapRaw;
-const startsWithMap: MapType = startsWithRaw;
-const endsWithMap: MapType = endsWithRaw;
-const lengthMap: MapType = lengthRaw;
+// Typed maps
+const signatureMap: WordMap = signatureMapRaw;
+const startsWithMap: WordMap = startsWithRaw;
+const endsWithMap: WordMap = endsWithRaw;
+const lengthMap: WordMap = lengthRaw;
 
 /* ---------------------------
    UNSCRAMBLE
 ----------------------------*/
-export function getUnscramble(letters?: string) {
-  if (!letters) return [];
-
+export function getUnscramble(letters = ""): string[] {
   const key = letters
     .toLowerCase()
     .replace(/[^a-z]/g, "")
@@ -24,29 +22,28 @@ export function getUnscramble(letters?: string) {
     .sort()
     .join("");
 
-  return signatureMap[key] || [];
+  return signatureMap[key] ?? [];
 }
 
 /* ---------------------------
    PREFIX
 ----------------------------*/
-export function getWordsByStart(letter?: string) {
-  if (!letter) return [];
-  return startsWithMap[letter.toLowerCase()] || [];
+export function getWordsByStart(letter = ""): string[] {
+  const key = letter.toLowerCase();
+  return startsWithMap[key] ?? [];
 }
 
 /* ---------------------------
    SUFFIX
 ----------------------------*/
-export function getWordsByEnd(suffix?: string) {
-  if (!suffix) return [];
-  return endsWithMap[suffix.toLowerCase()] || [];
+export function getWordsByEnd(suffix = ""): string[] {
+  const key = suffix.toLowerCase();
+  return endsWithMap[key] ?? [];
 }
 
 /* ---------------------------
    LENGTH
 ----------------------------*/
-export function getWordsByLength(length?: string | number) {
-  if (!length) return [];
-  return lengthMap[String(length)] || [];
+export function getWordsByLength(length: string | number = ""): string[] {
+  return lengthMap[String(length)] ?? [];
 }

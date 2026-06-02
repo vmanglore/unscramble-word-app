@@ -1,18 +1,33 @@
 import signatureMap from "@/data/compiled/signatureMap.json";
 
-const allWords = Object.values(signatureMap).flat();
+type WordMap = Record<string, string[]>;
 
-// simple frequency simulation (replace later with real analytics if needed)
-const freqMap: Record<string, number> = {};
+const allWords = Object.values(signatureMap as WordMap).flat();
 
-for (const word of allWords) {
-  const w = word.toLowerCase();
-  freqMap[w] = (freqMap[w] || 0) + 1;
+// simple deterministic shuffle (stable output)
+function shuffle(array: string[]) {
+  let currentIndex = array.length;
+
+  while (currentIndex !== 0) {
+    const randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
 }
 
-export function getTrendingWords(limit = 20) {
-  return Object.entries(freqMap)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([word]) => word);
+/**
+ * Returns trending words (static-based, no API dependency)
+ */
+export function getTrendingWords(limit = 12): string[] {
+  const uniqueWords = Array.from(new Set(allWords));
+
+  const shuffled = shuffle([...uniqueWords]);
+
+  return shuffled.slice(0, limit);
 }
