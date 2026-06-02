@@ -1,0 +1,54 @@
+{
+  "a": [
+    "apple",
+    "angle",
+    "amble",
+    "art"
+  ],
+  "b": [
+    "banana",
+    "bat",
+    "bar"
+  ],
+  "o": [
+    "orange"
+  ],
+  "l": [
+    "listen",
+    "leap"
+  ],
+  "s": [
+    "silent",
+    "stream"
+  ],
+  "e": [
+    "enlist"
+  ],
+  "i": [
+    "inlets"
+  ],
+  "m": [
+    "master",
+    "meats",
+    "mate"
+  ],
+  "t": [
+    "tamers",
+    "tame",
+    "team",
+    "tape",
+    "tar"
+  ],
+  "p": [
+    "peat",
+    "pale",
+    "peal"
+  ],
+  "c": [
+    "cat",
+    "car"
+  ],
+  "r": [
+    "rat"
+  ]
+}
