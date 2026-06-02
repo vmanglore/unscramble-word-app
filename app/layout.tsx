@@ -1,13 +1,15 @@
+import type { Metadata } from "next";
 import "./globals.css";
 
-//temporary
-import type { Metadata } from "next";
-
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL("https://unscramblewordnow.com"),
+  title: {
+    default: "Unscramble Word Now",
+    template: "%s | Unscramble Word Now",
+  },
+  description:
+    "Unscramble letters, find words by length, starting letter, ending pattern, and word patterns.",
 };
-
-//temporary
 
 export default function RootLayout({
   children,

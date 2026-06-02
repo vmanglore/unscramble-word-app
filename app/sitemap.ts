@@ -1,7 +1,8 @@
+import type { MetadataRoute } from "next";
 import signatureMap from "@/data/compiled/signatureMap.json";
 
-export default function sitemap() {
-  const baseUrl = "https://your-domain.com";
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://unscramblewordnow.com";
 
   const unscramblePages = Object.keys(signatureMap).map((key) => ({
     url: `${baseUrl}/unscramble/${key}`,

@@ -1,15 +1,25 @@
+import type { Metadata } from "next";
 import { findByPattern } from "@/lib/engine/search";
 import { buildPatternContent } from "@/lib/seo/content";
 import RelatedLinks from "@/components/RelatedLinks";
 
 type Props = {
-  params: {
+  params: Promise<{
     pattern: string;
-  };
+  }>;
 };
 
-export default function Page({ params }: Props) {
-  const pattern = params.pattern;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { pattern } = await params;
+
+  return {
+    title: `Words With Pattern ${pattern} | Unscramble Word Now`,
+    description: `Find words matching the pattern ${pattern}. Useful for word games, crossword puzzles, Scrabble, and word solving.`,
+  };
+}
+
+export default async function Page({ params }: Props) {
+  const { pattern } = await params;
 
   const words = findByPattern(pattern);
 
@@ -17,7 +27,6 @@ export default function Page({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto p-6">
-
       <h1 className="text-3xl font-bold">
         {content.title}
       </h1>
