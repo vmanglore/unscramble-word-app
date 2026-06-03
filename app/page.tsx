@@ -48,9 +48,7 @@ export default function Page() {
       setResults(words);
       setSuggestions([]);
 
-      if (words.length === 1) {
-        router.push(`/unscramble/${query}`);
-      }
+      router.push(`/unscramble/${query}`);
     } catch (err) {
       setError("Something went wrong. Please try again.");
       setResults([]);
@@ -63,7 +61,6 @@ export default function Page() {
     <main className="min-h-screen bg-slate-50">
       <div className="max-w-4xl mx-auto px-6 py-12">
 
-        {/* Hero */}
         <header className="text-center mb-10">
           <h1 className="text-5xl font-bold text-slate-900 mb-4">
             Unscramble Words
@@ -74,9 +71,7 @@ export default function Page() {
           </p>
         </header>
 
-        {/* Search Card */}
         <section className="bg-white rounded-2xl shadow-lg p-6">
-
           <label className="block text-sm font-medium text-slate-700 mb-2">
             Letters
           </label>
@@ -90,7 +85,6 @@ export default function Page() {
             className="w-full border border-slate-300 rounded-xl p-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          {/* AUTOCOMPLETE */}
           {suggestions.length > 0 && (
             <div className="border rounded-lg mt-2 bg-white shadow max-h-48 overflow-auto">
               {suggestions.map((word) => (
@@ -121,7 +115,6 @@ export default function Page() {
           )}
         </section>
 
-        {/* 🔥 TRENDING SECTION (NEW) */}
         <section className="mt-10 bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-4">
             Trending Words
@@ -140,9 +133,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Results */}
         <section className="mt-10 bg-white rounded-2xl shadow-lg p-6">
-
           <h2 className="text-2xl font-semibold mb-4">
             Results
           </h2>
@@ -166,9 +157,7 @@ export default function Page() {
               ))}
             </div>
           )}
-
         </section>
-
       </div>
     </main>
   );
