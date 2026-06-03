@@ -20,6 +20,10 @@ export default function Page() {
     if (a.length !== b.length) return b.length - a.length;
     return a.localeCompare(b);
   });
+  const topResult = sortedResults[0];
+  const detailLetters = topResult
+    ? Array.from(new Set(topResult.toUpperCase().split(""))).sort()
+    : [];
 
   function handleInputChange(value: string) {
     setLetters(value);
@@ -150,19 +154,64 @@ export default function Page() {
             ) : results.length === 0 ? (
               <p className="text-slate-500">No words found.</p>
             ) : (
-              <div className="flex flex-wrap gap-3">
-                {sortedResults.map((word) => (
-                  <button
-                    key={word}
-                    onClick={() =>
-                      router.push(`/words-starting-with/${word[0]}`)
-                    }
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-900 font-semibold text-lg transition"
-                  >
-                    {word}
-                  </button>
-                ))}
-              </div>
+              <>
+                <div className="flex flex-wrap gap-3">
+                  {sortedResults.map((word) => (
+                    <button
+                      key={word}
+                      onClick={() =>
+                        router.push(`/words-starting-with/${word[0]}`)
+                      }
+                      className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-900 font-semibold text-lg transition"
+                    >
+                      {word}
+                    </button>
+                  ))}
+                </div>
+
+                {topResult && (
+                  <div className="mt-6 border-t border-slate-200 pt-5">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                      Word Details
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <p className="text-slate-500">Best match</p>
+                        <p className="font-semibold text-slate-900">{topResult}</p>
+                      </div>
+
+                      <div>
+                        <p className="text-slate-500">Length</p>
+                        <p className="font-semibold text-slate-900">
+                          {topResult.length} {topResult.length === 1 ? "letter" : "letters"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-slate-500">Starts / Ends</p>
+                        <p className="font-semibold text-slate-900">
+                          {topResult[0]?.toUpperCase()} / {topResult[topResult.length - 1]?.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="text-sm text-slate-500 mb-2">Unique letters</p>
+                      <div className="flex flex-wrap gap-2">
+                        {detailLetters.map((letter) => (
+                          <span
+                            key={letter}
+                            className="px-3 py-1 bg-slate-100 rounded-lg text-slate-800 font-medium text-sm"
+                          >
+                            {letter}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </section>
         )}
