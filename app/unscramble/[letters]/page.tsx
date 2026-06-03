@@ -30,11 +30,14 @@ export default async function Page({ params }: Props) {
   const words = getUnscramble(decodedLetters);
   const topResult = words[0];
   const hasSingleResult = words.length === 1;
+  const sortedWords = [...words].sort((a, b) => {
+    if (a.length !== b.length) return b.length - a.length;
+    return a.localeCompare(b);
+  });
 
   return (
     <main className="min-h-screen bg-slate-50">
       <div className="max-w-3xl mx-auto px-6 py-12">
-        {/* Header */}
         <h1 className="text-4xl font-bold mb-2">
           Unscramble {displayLetters}
         </h1>
@@ -53,21 +56,23 @@ export default async function Page({ params }: Props) {
           )}
         </p>
 
-        {/* Stats */}
         <div className="mb-6 text-sm text-slate-500">
           {words.length} {words.length === 1 ? "word" : "words"} found
         </div>
 
-        {/* Results */}
         <div className="bg-white rounded-2xl shadow p-6">
+          <h2 className="text-2xl font-semibold mb-4">
+            {words.length === 1 ? "Matching Word" : "Matching Words"}
+          </h2>
+
           {words.length === 0 ? (
             <p className="text-slate-500">No words found.</p>
           ) : (
-            <div className="flex flex-wrap gap-2">
-              {words.map((word) => (
+            <div className="flex flex-wrap gap-3">
+              {sortedWords.map((word) => (
                 <span
                   key={word}
-                  className="px-3 py-2 bg-slate-100 rounded-lg text-slate-800 font-medium"
+                  className="px-4 py-2 bg-slate-100 rounded-xl text-slate-900 font-semibold text-lg"
                 >
                   {word}
                 </span>
@@ -76,7 +81,6 @@ export default async function Page({ params }: Props) {
           )}
         </div>
 
-        {/* SEO Content */}
         <section className="mt-10 prose max-w-none">
           <h2 className="text-2xl font-semibold mb-3">
             Words formed from {displayLetters}
@@ -99,23 +103,8 @@ export default async function Page({ params }: Props) {
               </>
             )}
           </p>
-
-          {words.length > 0 && (
-            <>
-              <h3 className="text-xl font-semibold mt-6 mb-3">
-                {hasSingleResult ? "Matching Word" : "Matching Words"}
-              </h3>
-
-              <ul className="list-disc pl-6">
-                {words.map((word) => (
-                  <li key={`list-${word}`}>{word}</li>
-                ))}
-              </ul>
-            </>
-          )}
         </section>
 
-        {/* RELATED LINKS (FIXED POSITION) */}
         <div className="mt-10">
           <RelatedLinks />
         </div>
