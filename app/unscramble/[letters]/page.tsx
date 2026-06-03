@@ -33,10 +33,6 @@ export default async function Page({ params }: Props) {
   const hasSingleResult = words.length === 1;
   const detailWord = topResult || cleanLetters;
   const detailLetters = Array.from(new Set(detailWord.toUpperCase().split(""))).sort();
-  const sortedWords = [...words].sort((a, b) => {
-    if (a.length !== b.length) return b.length - a.length;
-    return a.localeCompare(b);
-  });
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -72,7 +68,7 @@ export default async function Page({ params }: Props) {
             <p className="text-slate-500">No words found.</p>
           ) : (
             <div className="flex flex-wrap gap-3">
-              {sortedWords.map((word) => (
+             {words.map((word) => (
                 <span
                   key={word}
                   className="px-4 py-2 bg-slate-100 rounded-xl text-slate-900 font-semibold text-lg"
