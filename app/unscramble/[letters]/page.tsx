@@ -25,11 +25,14 @@ export async function generateMetadata({
 export default async function Page({ params }: Props) {
   const { letters } = await params;
   const decodedLetters = decodeURIComponent(letters);
-  const displayLetters = decodedLetters.toUpperCase();
+  const cleanLetters = decodedLetters.toLowerCase().replace(/[^a-z]/g, "");
+  const displayLetters = cleanLetters.toUpperCase();
 
-  const words = getUnscramble(decodedLetters);
+  const words = getUnscramble(cleanLetters);
   const topResult = words[0];
   const hasSingleResult = words.length === 1;
+  const detailWord = topResult || cleanLetters;
+  const detailLetters = Array.from(new Set(detailWord.toUpperCase().split(""))).sort();
   const sortedWords = [...words].sort((a, b) => {
     if (a.length !== b.length) return b.length - a.length;
     return a.localeCompare(b);
@@ -81,6 +84,54 @@ export default async function Page({ params }: Props) {
           )}
         </div>
 
+        {detailWord && (
+          <section className="mt-10 bg-white rounded-2xl shadow p-6">
+            <h2 className="text-2xl font-semibold mb-4">Word Details</h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-slate-700">
+              <div>
+                <p className="text-sm text-slate-500">Letters searched</p>
+                <p className="font-semibold text-slate-900">{displayLetters}</p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Best match</p>
+                <p className="font-semibold text-slate-900">
+                  {topResult ? topResult : "No valid word found"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Length</p>
+                <p className="font-semibold text-slate-900">
+                  {detailWord.length} {detailWord.length === 1 ? "letter" : "letters"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500">Starts / Ends</p>
+                <p className="font-semibold text-slate-900">
+                  {detailWord[0]?.toUpperCase()} / {detailWord[detailWord.length - 1]?.toUpperCase()}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <p className="text-sm text-slate-500 mb-2">Unique letters</p>
+              <div className="flex flex-wrap gap-2">
+                {detailLetters.map((letter) => (
+                  <span
+                    key={letter}
+                    className="px-3 py-1 bg-slate-100 rounded-lg text-slate-800 font-medium"
+                  >
+                    {letter}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section className="mt-10 prose max-w-none">
           <h2 className="text-2xl font-semibold mb-3">
             Words formed from {displayLetters}
@@ -105,9 +156,7 @@ export default async function Page({ params }: Props) {
           </p>
         </section>
 
-        <div className="mt-10">
-          <RelatedLinks />
-        </div>
+        <RelatedLinks word={topResult} letters={cleanLetters} />
       </div>
     </main>
   );
