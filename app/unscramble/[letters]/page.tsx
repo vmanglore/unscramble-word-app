@@ -13,10 +13,11 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { letters } = await params;
   const decodedLetters = decodeURIComponent(letters);
+  const displayLetters = decodedLetters.toUpperCase();
 
   return {
-    title: `Unscramble ${decodedLetters.toUpperCase()} | Word Solver`,
-    description: `Find all valid English words from the scrambled letters ${decodedLetters.toUpperCase()} using our fast anagram solver.`,
+    title: `Unscramble ${displayLetters} | Word Solver`,
+    description: `Find all valid English words from the scrambled letters ${displayLetters} using our fast anagram solver.`,
     keywords: ["unscramble words", "anagram solver", "word finder", decodedLetters],
   };
 }
@@ -41,8 +42,8 @@ export default async function Page({ params }: Props) {
         <p className="text-slate-600 mb-6">
           {hasSingleResult && topResult ? (
             <>
-              The scrambled letters <strong>{displayLetters}</strong> make the word{" "}
-              <strong>{topResult}</strong>.
+              The letters <strong>{displayLetters}</strong> can be rearranged
+              to form <strong>{topResult}</strong>.
             </>
           ) : (
             <>
@@ -61,25 +62,12 @@ export default async function Page({ params }: Props) {
         <div className="bg-white rounded-2xl shadow p-6">
           {words.length === 0 ? (
             <p className="text-slate-500">No words found.</p>
-          ) : hasSingleResult && topResult ? (
-            <div>
-              <p className="text-sm font-medium uppercase tracking-wide text-slate-500 mb-2">
-                Result
-              </p>
-              <div className="text-4xl font-bold text-slate-900 mb-3">
-                {topResult}
-              </div>
-              <p className="text-slate-600">
-                <strong>{displayLetters}</strong> unscrambles to{" "}
-                <strong>{topResult}</strong>.
-              </p>
-            </div>
           ) : (
             <div className="flex flex-wrap gap-2">
               {words.map((word) => (
                 <span
                   key={word}
-                  className="px-3 py-2 bg-slate-100 rounded-lg text-slate-800"
+                  className="px-3 py-2 bg-slate-100 rounded-lg text-slate-800 font-medium"
                 >
                   {word}
                 </span>
@@ -91,7 +79,7 @@ export default async function Page({ params }: Props) {
         {/* SEO Content */}
         <section className="mt-10 prose max-w-none">
           <h2 className="text-2xl font-semibold mb-3">
-            Words made from {displayLetters}
+            Words formed from {displayLetters}
           </h2>
 
           <p className="text-slate-700">
