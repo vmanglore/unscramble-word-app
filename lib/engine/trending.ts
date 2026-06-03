@@ -1,24 +1,25 @@
-import signatureMap from "@/data/compiled/signatureMap.json";
-
-type WordMap = Record<string, string[]>;
-
-const allWords = Object.values(signatureMap as WordMap).flat();
+const exampleWords = [
+  "apple",
+  "table",
+  "stone",
+  "plant",
+  "chair",
+  "heart",
+  "water",
+  "light",
+  "green",
+  "house",
+  "dream",
+  "world",
+];
 
 /**
- * Returns stable static word suggestions.
+ * Returns stable static word suggestions for the homepage.
  *
- * This must stay deterministic because the homepage is a client component that
- * is pre-rendered on the server and then hydrated in the browser. Using
- * Math.random() here causes server/client text mismatches during hydration.
+ * This intentionally avoids deriving the list from JSON data or using random
+ * ordering because the homepage is a client component that is pre-rendered on
+ * the server and then hydrated in the browser.
  */
 export function getTrendingWords(limit = 12): string[] {
-  const uniqueWords = Array.from(new Set(allWords));
-
-  return uniqueWords
-    .filter((word) => word.length >= 3)
-    .sort((a, b) => {
-      if (a.length !== b.length) return b.length - a.length;
-      return a.localeCompare(b);
-    })
-    .slice(0, limit);
+  return exampleWords.slice(0, limit);
 }
