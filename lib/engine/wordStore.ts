@@ -9,7 +9,7 @@ type WordMap = Record<string, string[]>;
 type FrequencyMap = Record<string, number>;
 type DefinitionMap = Record<string, string>;
 
-type WordFinderFilters = {
+export type WordFinderFilters = {
   length?: string | number;
   startsWith?: string;
   endsWith?: string;
@@ -29,7 +29,7 @@ function cleanLetters(value = "") {
   return value.toLowerCase().replace(/[^a-z]/g, "");
 }
 
-function getAllWords(): string[] {
+export function getAllWords(): string[] {
   return Array.from(new Set(Object.values(lengthMap).flat()));
 }
 
@@ -39,6 +39,10 @@ export function getWordFrequency(word = ""): number | undefined {
 
 export function getWordDefinition(word = ""): string | undefined {
   return definitions[word.toLowerCase()];
+}
+
+export function hasWordDefinition(word = ""): boolean {
+  return Boolean(getWordDefinition(word));
 }
 
 export function rankWords(words: string[]): string[] {
@@ -58,33 +62,43 @@ export function rankWords(words: string[]): string[] {
   });
 }
 
-export function findWords({
-  length,
-  startsWith = "",
-  endsWith = "",
-  contains = "",
-  limit = 200,
-}: WordFinderFilters = {}): string[] {
+export function filterWords(
+  words: string[],
+  { length, startsWith = "", endsWith = "", contains = "", limit }: WordFinderFilters = {}
+): string[] {
   const cleanLength = length ? String(length).replace(/[^0-9]/g, "") : "";
   const cleanStartsWith = cleanLetters(startsWith);
   const cleanEndsWith = cleanLetters(endsWith);
   const cleanContains = cleanLetters(contains);
 
-  let words = cleanLength ? lengthMap[cleanLength] ?? [] : getAllWords();
+  let filteredWords = Array.from(new Set(words));
+
+  if (cleanLength) {
+    filteredWords = filteredWords.filter((word) => word.length === Number(cleanLength));
+  }
 
   if (cleanStartsWith) {
-    words = words.filter((word) => word.startsWith(cleanStartsWith));
+    filteredWords = filteredWords.filter((word) => word.startsWith(cleanStartsWith));
   }
 
   if (cleanEndsWith) {
-    words = words.filter((word) => word.endsWith(cleanEndsWith));
+    filteredWords = filteredWords.filter((word) => word.endsWith(cleanEndsWith));
   }
 
   if (cleanContains) {
-    words = words.filter((word) => word.includes(cleanContains));
+    filteredWords = filteredWords.filter((word) => word.includes(cleanContains));
   }
 
-  return rankWords(Array.from(new Set(words))).slice(0, limit);
+  const rankedWords = rankWords(filteredWords);
+
+  return typeof limit === "number" ? rankedWords.slice(0, limit) : rankedWords;
+}
+
+export function findWords(filters: WordFinderFilters = {}): string[] {
+  const cleanLength = filters.length ? String(filters.length).replace(/[^0-9]/g, "") : "";
+  const baseWords = cleanLength ? lengthMap[cleanLength] ?? [] : getAllWords();
+
+  return filterWords(baseWords, filters);
 }
 
 /* ---------------------------
@@ -99,6 +113,13 @@ export function getUnscramble(letters = ""): string[] {
     .join("");
 
   return rankWords(signatureMap[key] ?? []);
+}
+
+export function getFilteredUnscramble(
+  letters = "",
+  filters: WordFinderFilters = {}
+): string[] {
+  return filterWords(getUnscramble(letters), filters);
 }
 
 /* ---------------------------
