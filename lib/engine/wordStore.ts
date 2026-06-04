@@ -95,8 +95,19 @@ export function filterWords(
 }
 
 export function findWords(filters: WordFinderFilters = {}): string[] {
-  const cleanLength = filters.length ? String(filters.length).replace(/[^0-9]/g, "") : "";
-  const baseWords = cleanLength ? lengthMap[cleanLength] ?? [] : getAllWords();
+  const cleanLength = filters.length
+    ? String(filters.length).replace(/[^0-9]/g, "")
+    : "";
+
+  const numericLength = Number(cleanLength);
+
+  if (cleanLength && numericLength < 1) {
+    return [];
+  }
+
+  const baseWords = cleanLength
+    ? lengthMap[cleanLength] ?? []
+    : getAllWords();
 
   return filterWords(baseWords, filters);
 }
