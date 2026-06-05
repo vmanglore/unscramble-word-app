@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { getSuggestions } from "@/lib/engine/autocomplete";
 import { getTrendingWords } from "@/lib/engine/trending";
 
+const inputClass =
+  "w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-300 placeholder:italic focus:outline-none focus:ring-2 focus:ring-blue-500";
+
 export default function Page() {
   const [letters, setLetters] = useState("");
   const [results, setResults] = useState<string[]>([]);
@@ -14,6 +17,12 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [lengthFilter, setLengthFilter] = useState("");
+  const [startsWithFilter, setStartsWithFilter] = useState("");
+  const [endsWithFilter, setEndsWithFilter] = useState("");
+  const [containsFilter, setContainsFilter] = useState("");
+
   const router = useRouter();
 
   const trending = getTrendingWords(12);
@@ -21,6 +30,19 @@ export default function Page() {
   const detailLetters = topResult
     ? Array.from(new Set(topResult.toUpperCase().split(""))).sort()
     : [];
+
+  function resetSearch() {
+    setLetters("");
+    setResults([]);
+    setDefinition("");
+    setSearchedLetters("");
+    setError("");
+    setSuggestions([]);
+    setLengthFilter("");
+    setStartsWithFilter("");
+    setEndsWithFilter("");
+    setContainsFilter("");
+  }
 
   function handleInputChange(value: string) {
     setLetters(value);
@@ -32,6 +54,7 @@ export default function Page() {
 
     if (!query) {
       setResults([]);
+      setDefinition("");
       setSearchedLetters("");
       setError("Please enter some letters.");
       return;
@@ -40,10 +63,16 @@ export default function Page() {
     setLoading(true);
     setError("");
 
+    const params = new URLSearchParams({
+      letters: query,
+      length: lengthFilter,
+      startsWith: startsWithFilter,
+      endsWith: endsWithFilter,
+      contains: containsFilter,
+    });
+
     try {
-      const response = await fetch(
-        `/api/unscramble?letters=${encodeURIComponent(query)}`
-      );
+      const response = await fetch(`/api/unscramble?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error("Failed to search");
@@ -80,8 +109,8 @@ export default function Page() {
         </header>
 
         <section className="bg-white rounded-2xl shadow-lg p-6">
-          <label className="block text-sm font-medium text-slate-700 mb-2">
-            Letters
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            Enter letters
           </label>
 
           <input
@@ -94,8 +123,8 @@ export default function Page() {
                 handleSearch();
               }
             }}
-            placeholder="e.g. aelpp"
-            className="w-full border border-slate-300 rounded-xl p-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="aelpp"
+            className="w-full border border-slate-300 rounded-xl p-4 text-lg placeholder:text-slate-300 placeholder:italic focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {suggestions.length > 0 && (
@@ -116,6 +145,72 @@ export default function Page() {
           )}
 
           <button
+            type="button"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="mt-4 text-sm text-blue-600 hover:underline"
+          >
+            {showAdvanced ? "Hide Advanced Filters ▲" : "Advanced Filters ▼"}
+          </button>
+
+          {showAdvanced && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Number of letters
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={lengthFilter}
+                  onChange={(e) => setLengthFilter(e.target.value)}
+                  className={inputClass}
+                  placeholder="5"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Starts with
+                </label>
+                <input
+                  type="text"
+                  value={startsWithFilter}
+                  onChange={(e) => setStartsWithFilter(e.target.value)}
+                  className={inputClass}
+                  placeholder="st"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Ends with
+                </label>
+                <input
+                  type="text"
+                  value={endsWithFilter}
+                  onChange={(e) => setEndsWithFilter(e.target.value)}
+                  className={inputClass}
+                  placeholder="h"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Contains
+                </label>
+                <input
+                  type="text"
+                  value={containsFilter}
+                  onChange={(e) => setContainsFilter(e.target.value)}
+                  className={inputClass}
+                  placeholder="ea"
+                />
+              </div>
+            </div>
+          )}
+
+          <button
             onClick={() => handleSearch()}
             disabled={loading}
             className="mt-4 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white font-semibold rounded-xl p-4 transition"
@@ -127,23 +222,17 @@ export default function Page() {
         {(searchedLetters || error) && (
           <section className="mt-10 bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
-  <div>
-    <button
-      onClick={() => {
-        setLetters("");
-        setResults([]);
-        setDefinition("");
-        setSearchedLetters("");
-        setError("");
-      }}
-      className="text-sm text-blue-600 hover:underline mb-2"
-    >
-      ← New Search
-    </button>
+              <div>
+                <button
+                  onClick={resetSearch}
+                  className="text-sm text-blue-600 hover:underline mb-2"
+                >
+                  ← New Search
+                </button>
 
-    <h2 className="text-2xl font-semibold text-slate-900">
-      Matching Words
-    </h2>
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  Matching Words
+                </h2>
 
                 {searchedLetters && (
                   <p className="text-sm text-slate-500 mt-1">
@@ -154,7 +243,9 @@ export default function Page() {
 
               {searchedLetters && (
                 <button
-                  onClick={() => router.push(`/unscramble/${searchedLetters.toLowerCase()}`)}
+                  onClick={() =>
+                    router.push(`/unscramble/${searchedLetters.toLowerCase()}`)
+                  }
                   className="text-sm text-blue-600 hover:underline whitespace-nowrap"
                 >
                   Open result page
@@ -172,9 +263,7 @@ export default function Page() {
                   {results.map((word) => (
                     <button
                       key={word}
-                      onClick={() =>
-                        router.push(`/unscramble/${word}`)
-                      }
+                      onClick={() => router.push(`/unscramble/${word}`)}
                       className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-900 font-semibold text-lg transition"
                     >
                       {word}
@@ -182,78 +271,80 @@ export default function Page() {
                   ))}
                 </div>
 
-{topResult && (
-  <div className="mt-6 border-t border-slate-200 pt-5">
-    <h3 className="text-lg font-semibold text-slate-900 mb-3">
-      Word Details
-    </h3>
+                {topResult && (
+                  <div className="mt-6 border-t border-slate-200 pt-5">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                      Word Details
+                    </h3>
 
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-      <div>
-        <p className="text-slate-500">Best match</p>
-        <p className="text-2xl font-bold text-slate-900">
-           {topResult}
-        </p>
-      </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <p className="text-slate-500">Best match</p>
+                        <p className="text-2xl font-bold text-slate-900">
+                          {topResult}
+                        </p>
+                      </div>
 
-      <div>
-        <p className="text-slate-500">Length</p>
-        <p className="font-semibold text-slate-900">
-          {topResult.length} {topResult.length === 1 ? "letter" : "letters"}
-        </p>
-      </div>
+                      <div>
+                        <p className="text-slate-500">Length</p>
+                        <p className="font-semibold text-slate-900">
+                          {topResult.length} {topResult.length === 1 ? "letter" : "letters"}
+                        </p>
+                      </div>
 
-      <div>
-        <p className="text-slate-500">Starts / Ends</p>
-        <p className="font-semibold text-slate-900">
-          {topResult[0]?.toUpperCase()} / {topResult[topResult.length - 1]?.toUpperCase()}
-        </p>
-      </div>
-    </div>
+                      <div>
+                        <p className="text-slate-500">Starts / Ends</p>
+                        <p className="font-semibold text-slate-900">
+                          {topResult[0]?.toUpperCase()} / {topResult[topResult.length - 1]?.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
 
-    <div className="mt-4">
-      <p className="text-sm text-slate-500 mb-2">Unique letters</p>
-      <div className="flex flex-wrap gap-2">
-        {detailLetters.map((letter) => (
-          <span
-            key={letter}
-            className="px-3 py-1 bg-slate-100 rounded-lg text-slate-800 font-medium text-sm"
-          >
-            {letter}
-          </span>
-        ))}
-      </div>
-    </div>
-        <section className="mt-10 bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            Trending Words
-          </h2>
+                    <div className="mt-4">
+                      <p className="text-sm text-slate-500 mb-2">Unique letters</p>
+                      <div className="flex flex-wrap gap-2">
+                        {detailLetters.map((letter) => (
+                          <span
+                            key={letter}
+                            className="px-3 py-1 bg-slate-100 rounded-lg text-slate-800 font-medium text-sm"
+                          >
+                            {letter}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-          <div className="flex flex-wrap gap-2">
-            {trending.map((word) => (
-              <button
-                key={word}
-                onClick={() => {setLetters(word);
-                handleSearch(word);}
-             }
-                className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-sm"
-              >
-                {word}
-              </button>
-            ))}
-          </div>
-        </section>
-    {definition && (
-      <div className="mt-6 border-t border-slate-200 pt-4">
-        <p className="text-sm text-slate-500 mb-2">Definition</p>
-        <p className="text-slate-700 leading-7">
-          {definition}
-        </p>
-      </div>
-    )}
-  </div>
-)}
+                    <section className="mt-10 bg-white rounded-2xl shadow-lg p-6">
+                      <h2 className="text-xl font-semibold mb-4">
+                        Trending Words
+                      </h2>
 
+                      <div className="flex flex-wrap gap-2">
+                        {trending.map((word) => (
+                          <button
+                            key={word}
+                            onClick={() => {
+                              setLetters(word);
+                              handleSearch(word);
+                            }}
+                            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-sm"
+                          >
+                            {word}
+                          </button>
+                        ))}
+                      </div>
+                    </section>
+
+                    {definition && (
+                      <div className="mt-6 border-t border-slate-200 pt-4">
+                        <p className="text-sm text-slate-500 mb-2">Definition</p>
+                        <p className="text-slate-700 leading-7">
+                          {definition}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             )}
           </section>
