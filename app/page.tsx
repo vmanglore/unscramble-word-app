@@ -9,6 +9,8 @@ const inputClass =
   "w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-300 placeholder:italic focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 export default function Page() {
+  const [selectedWord, setSelectedWord] = useState("");
+  const [definitionsByWord, setDefinitionsByWord] = useState<Record<string, string>>({});
   const [letters, setLetters] = useState("");
   const [results, setResults] = useState<string[]>([]);
   const [searchedLetters, setSearchedLetters] = useState("");
@@ -26,9 +28,9 @@ export default function Page() {
   const router = useRouter();
 
   const trending = getTrendingWords(12);
-  const topResult = results[0];
-  const detailLetters = topResult
-    ? Array.from(new Set(topResult.toUpperCase().split(""))).sort()
+  const activeWord = selectedWord || results[0];
+  const detailLetters = activeWord
+    ? Array.from(new Set(activeWord.toUpperCase().split(""))).sort()
     : [];
 
   function resetSearch() {
@@ -42,6 +44,8 @@ export default function Page() {
     setStartsWithFilter("");
     setEndsWithFilter("");
     setContainsFilter("");
+    setSelectedWord("");
+    setDefinitionsByWord({});
   }
 
   function handleInputChange(value: string) {
@@ -82,6 +86,8 @@ export default function Page() {
       const words = data.words || [];
 
       setResults(words);
+      setSelectedWord(data.bestWord || "");
+      setDefinitionsByWord(data.definitionsByWord || {});
       setDefinition(data.definition || "");
       setSearchedLetters(query.toUpperCase());
       setSuggestions([]);
@@ -263,7 +269,10 @@ export default function Page() {
                   {results.map((word) => (
                     <button
                       key={word}
-                      onClick={() => router.push(`/unscramble/${word}`)}
+                      onClick={() => {
+                                      setSelectedWord(word);
+                                      setDefinition(definitionsByWord[word] || "");
+                                      }}
                       className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-900 font-semibold text-lg transition"
                     >
                       {word}
@@ -271,7 +280,7 @@ export default function Page() {
                   ))}
                 </div>
 
-                {topResult && (
+                {activeWord && (
                   <div className="mt-6 border-t border-slate-200 pt-5">
                     <h3 className="text-lg font-semibold text-slate-900 mb-3">
                       Word Details
@@ -281,21 +290,21 @@ export default function Page() {
                       <div>
                         <p className="text-slate-500">Best match</p>
                         <p className="text-2xl font-bold text-slate-900">
-                          {topResult}
+                          {activeWord}
                         </p>
                       </div>
 
                       <div>
                         <p className="text-slate-500">Length</p>
                         <p className="font-semibold text-slate-900">
-                          {topResult.length} {topResult.length === 1 ? "letter" : "letters"}
+                          {activeWord.length} {activeWord.length === 1 ? "letter" : "letters"}
                         </p>
                       </div>
 
                       <div>
                         <p className="text-slate-500">Starts / Ends</p>
                         <p className="font-semibold text-slate-900">
-                          {topResult[0]?.toUpperCase()} / {topResult[topResult.length - 1]?.toUpperCase()}
+                          {activeWord[0]?.toUpperCase()} / {activeWord[activeWord.length - 1]?.toUpperCase()}
                         </p>
                       </div>
                     </div>
