@@ -19,8 +19,12 @@ export async function GET(req: Request) {
     contains,
   });
 
-  const bestWord = words[0];
-  const definition = bestWord ? getWordDefinition(bestWord) : undefined;
+  const definitionsByWord = Object.fromEntries(
+    words.map((word) => [word, getWordDefinition(word) || ""])
+  );
 
-  return Response.json({ words, bestWord, definition });
+  const bestWord = words[0];
+  const definition = bestWord ? definitionsByWord[bestWord] : undefined;
+
+  return Response.json({ words, bestWord, definition, definitionsByWord });
 }
