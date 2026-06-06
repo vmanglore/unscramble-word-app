@@ -9,6 +9,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
   }));
 
+  const wordsFromLettersPages = Object.keys(signatureMap).map((key) => ({
+    url: `${baseUrl}/words-from-letters/${key}`,
+    lastModified: new Date(),
+  }));
+
   const letters = "abcdefghijklmnopqrstuvwxyz".split("").map((l) => ({
     url: `${baseUrl}/words-starting-with/${l}`,
     lastModified: new Date(),
@@ -29,7 +34,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: baseUrl,
       lastModified: new Date(),
     },
+    {
+      url: `${baseUrl}/words-from-letters`,
+      lastModified: new Date(),
+    },
     ...unscramblePages,
+    ...wordsFromLettersPages,
     ...letters,
     ...endings,
     ...lengths,

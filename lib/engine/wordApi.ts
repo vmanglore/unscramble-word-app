@@ -1,3 +1,7 @@
+type DatamuseWord = {
+  word?: string;
+};
+
 export async function fetchWordsFromAPI(query: string): Promise<string[]> {
   try {
     const res = await fetch(
@@ -6,9 +10,11 @@ export async function fetchWordsFromAPI(query: string): Promise<string[]> {
 
     if (!res.ok) return [];
 
-    const data = await res.json();
+    const data = (await res.json()) as DatamuseWord[];
 
-    return data.map((item: any) => item.word);
+    return data
+      .map((item) => item.word)
+      .filter((word): word is string => typeof word === "string");
   } catch (err) {
     console.error("wordApi error:", err);
     return [];

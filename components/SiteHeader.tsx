@@ -15,6 +15,9 @@ export default function SiteHeader() {
           <Link href="/word-finder" className="hover:text-blue-600">
             Word Finder
           </Link>
+          <Link href="/words-from-letters" className="hover:text-blue-600">
+            Words From Letters
+          </Link>
           <Link href="/word-length/5" className="hover:text-blue-600">
             5 Letter Words
           </Link>

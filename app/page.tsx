@@ -91,7 +91,7 @@ export default function Page() {
       setDefinition(data.definition || "");
       setSearchedLetters(query.toUpperCase());
       setSuggestions([]);
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again.");
       setResults([]);
       setDefinition("");

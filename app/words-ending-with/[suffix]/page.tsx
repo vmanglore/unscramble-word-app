@@ -40,7 +40,7 @@ export default async function Page({ params }: Props) {
       {/* SEO Content */}
       <section className="mt-10 max-w-3xl text-slate-700">
         <h2 className="text-2xl font-semibold mb-3">
-          Words That End With "{suffix}"
+          Words That End With &quot;{suffix}&quot;
         </h2>
 
         <p>
