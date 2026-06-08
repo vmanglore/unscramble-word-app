@@ -33,19 +33,19 @@ SB-004, SB-005, SB-006, FLT-001, FLT-003, FLT-004, FLT-005, FLT-006, FLT-007, FL
 Notes:
 Optional filters must only affect results when the user supplies an intentional value. Blank values must be ignored, and UI placeholder text must never become search input. Multiple intentionally supplied filters are still combined with AND logic.
 
-## RH-003 — Meaningless word fragments appeared in results
+## RH-003 — Non-dictionary strings appeared in results
 
 Issue:
-Low-value abbreviations and dictionary fragments appeared in search results, including examples such as mr, sr, rt, rs, and similar entries.
+Invalid/generated/non-dictionary strings can appear in search results when result generation is not constrained by the approved dictionary source. Earlier examples included short low-value entries such as mr, sr, rt, rs, and similar terms whose eligibility depends on the approved source policy.
 
 Status:
-Fixed
+Open
 
 Related rule IDs:
-PP-001, PP-002, PP-003, WQ-001, WQ-002, WQ-003, WQ-005, DD-001, DD-002, DD-003, DD-004, TR-001, TR-002, TR-004
+PP-001, PP-002, PP-003, WQ-001, WQ-002, WQ-003, WQ-005, DD-001, DD-002, DD-003, DD-004, DD-005, DD-006, TR-001, TR-002, TR-004
 
 Notes:
-The product is intended to help users find meaningful English words, not maximize raw dictionary count. Abbreviations and fragments should remain excluded unless explicitly approved by a future business-rule decision.
+The product is intended to help users find valid English words from the approved dictionary source, not maximize raw generated combinations. Release 1.1 must protect dictionary-backed result integrity: invalid/generated/non-dictionary strings should never be returned, while uncommon but valid dictionary-backed words such as eta, tae, ers, ems, and ret should remain available when present in the approved source. Abbreviations, acronyms, and fragments should be included or excluded according to the approved dictionary/source policy rather than guessed by implementation.
 
 ## RH-004 — Searches incorrectly required all entered letters
 
@@ -73,7 +73,7 @@ Related rule IDs:
 PP-001, PP-002, PP-003, WQ-001, WQ-004, WQ-005, DD-001, DD-002, DD-003, UX-003, TR-003, TR-004
 
 Notes:
-Word quality is an ongoing business-rule concern. Ranking should prioritize common, frequently used, longer, and meaningful English words before rare words. Dictionary updates and ranking changes should be validated so low-value entries are not reintroduced or promoted.
+Word quality is an ongoing business-rule concern. Ranking may prioritize common, frequently used, longer, and broadly useful English words before rare words, but ranking must not suppress valid uncommon words solely because they are uncommon. Dictionary updates and ranking changes should be validated so invalid/generated/non-dictionary strings are not introduced or promoted.
 
 ## RH-006 — Filter behavior instability across releases
 

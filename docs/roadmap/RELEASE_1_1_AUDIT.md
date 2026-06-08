@@ -15,12 +15,12 @@
   - `npm run build` — pass.
   - `npx ts-node --project tsconfig.json --transpile-only -r tsconfig-paths/register tests/unscrambleSearch.test.ts` — fail: `Cannot find package '@/lib' imported from ... tests/unscrambleSearch.test.ts`.
   - Local runtime smoke check with `npm run start` plus Python `urllib.request` for `/`, `/word-finder`, `/words-from-letters`, `/unscramble/aelpp`, `/words-from-letters/aelpp`, `/word-length/5`, `/words-starting-with/a`, `/words-ending-with/ing`, `/words-with-pattern/a__le`, `/sitemap.xml`, and `/robots.txt` — all returned HTTP 200; none of the HTML route responses contained `rel="canonical"`.
-  - Node data probe against `data/compiled/lengthMap.json`, `data/compiled/frequencyMap.json`, and `data/compiled/signatureMap.json` — found rule-listed low-value examples in the compiled data and in candidate search output.
+  - Node data probe against `data/compiled/lengthMap.json`, `data/compiled/frequencyMap.json`, and `data/compiled/signatureMap.json` — found short entries in the compiled data and candidate search output whose Release 1.1 handling must be determined by approved dictionary/source policy, not by broad uncommon-word removal.
 
 ## Rule Compliance
 - Search behavior: subset search and length filtering are implemented in `getFilteredUnscramble()` through buildable-word filtering, not exact-signature-only matching, which aligns with SB-002 and SB-003 for the homepage/API path. However, `/unscramble/[letters]` still uses exact-signature `getUnscramble()` only, so behavior differs between interactive search and the dynamic SEO route.
 - Filter behavior: blank filters are cleaned before filtering and multiple intentional filters are applied sequentially, consistent with FLT-006 and FLT-007 in the shared `filterWords()` helper.
-- Word quality: the core unscramble path still returns low-value abbreviations/fragments that rules explicitly identify as not preferred. This violates WQ-001 through WQ-003 and reopens RH-003 for the homepage/API path.
+- Word quality: the core unscramble path must be validated for dictionary-backed result integrity. Release 1.1 should prevent invalid/generated/non-dictionary strings, while keeping uncommon but valid dictionary-backed words available according to WQ-001 through WQ-003 and DD-002 through DD-005.
 - Ranking: `rankWords()` sorts by raw frequency first, then length, then alphabetically. This can promote very short common words above more useful target words for letter-entry searches, conflicting with WQ-004 and PP-002/PP-003 when the user intent is to find meaningful words from letters.
 - SEO: route metadata exists on several route families, but canonical URLs are absent across observed pages and no `alternates.canonical` usage exists in `app/`. This violates SEO-002. Sitemap source omits implemented major routes such as `/word-finder` and `/words-with-pattern/[pattern]`, which conflicts with SEO-003 and the roadmap’s sitemap-coverage validation objective.
 - UX: no-result and blank-input feedback exists on the homepage and form pages, but several SEO browse routes render very large unpaginated chip lists, creating performance and usability risk for mobile users and casual users.
@@ -31,8 +31,8 @@
 - Missing coverage:
   - No executable npm script for the regression test file; attempted direct `ts-node` execution fails on the `@/lib` alias.
   - Tests do not reference business-rule IDs, contrary to TR-004.
-  - No automated coverage for RH-003 low-value word exclusion examples (`mr`, `sr`, `rt`, `rs`, `mt`) on the homepage/API `getFilteredUnscramble()` path.
-  - No automated coverage for RH-005 ranking quality; `aelpp` only asserts that `apple` is included, not that useful words are ranked ahead of low-value or very short fragments.
+  - No automated coverage for RH-003 dictionary-backed result integrity on the homepage/API `getFilteredUnscramble()` path, including protection that invalid/generated strings are absent and uncommon valid dictionary words remain available.
+  - No automated coverage for RH-005 ranking quality; `aelpp` only asserts that `apple` is included, not that useful words are prioritized ahead of less useful very short words while uncommon valid words remain available.
   - No automated coverage for Release 2 words-from-letters behavior (`canBuildWord`, `getWordsFromLetters`, `groupWordsByLength`), dynamic route metadata, related searches, or grouped descending-length display.
   - No automated coverage for SEO-002 canonical URLs, SEO-003 sitemap coverage, or SEO-004 robots output.
 
@@ -44,13 +44,13 @@
   - Sitemap coverage omits implemented major route families and static utility routes.
   - Dynamic route smoke checks returned HTTP 200, but there is no automated regression protection for those checks.
 - Not aligned with Release 4 / backlog guardrails: regression tests do not cover all documented regression-history items and do not cite rule IDs.
-- Not aligned with Release 5 ranking/dictionary direction: current ranking and compiled data still allow low-value entries to appear in important result sets.
+- Not aligned with Release 5 ranking/dictionary direction: current ranking and compiled data need clearer dictionary-backed integrity checks so invalid/generated strings are not surfaced while uncommon valid dictionary words remain available.
 
 ## Implementation Findings
 | Severity | Area | Finding | Evidence | Required Action |
 | --- | --- | --- | --- | --- |
-| Critical | Word quality / business rules | The core unscramble search can return rule-listed low-value abbreviations and fragments. This conflicts with WQ-001, WQ-002, WQ-003, DD-003, and RH-003. | `docs/rules/03-word-quality.md` lists `mr`, `sr`, `rt`, `rs`, and `mt` as not preferred. A Node probe found `mr`, `sr`, `rt`, `rs`, and `mt` present in `data/compiled/lengthMap.json`, and `getFilteredUnscramble`-equivalent output for `rst` begins with `st`, `rs`, `sr`, `rt`, `ts`, `tr`, `str`, `rts`. The homepage API uses `getFilteredUnscramble()` without the low-value filtering used by `wordsFromLetters.ts`. | Add a shared dictionary-quality/displayability filter for all search paths or remove/rebuild low-value entries from compiled data, then add RH-003 regression tests. |
-| High | Ranking / search quality | Useful target words can be ranked behind very short words/fragments. For `aelpp`, `apple` is not ranked first in the core search candidate order; the probe returned `la`, `al`, `el`, `le`, then `apple`. | `rankWords()` sorts frequency before length; tests only assert `apple` inclusion, not useful ranking. WQ-004 requires common/frequent/longer/useful ordering and PP-003 prioritizes UX over result count. | Define and test ranking expectations for core letter searches, including `aelpp`, `stream`, and known low-value examples. |
+| Critical | Dictionary-backed result integrity / business rules | The core unscramble search needs an explicit shared policy that guarantees all returned words are backed by the approved dictionary source without broadly removing obscure but valid dictionary words. This maps to WQ-001, WQ-002, WQ-003, DD-002, DD-003, DD-004, DD-005, and RH-003. | A Node probe found short entries in `data/compiled/lengthMap.json` and candidate output. Under the updated product decision, entries such as `eta`, `tae`, `ers`, `ems`, and `ret` must remain available if present in the approved dictionary source; invalid/generated/non-dictionary strings must never be returned; abbreviations, acronyms, and fragments follow source policy. | Add shared dictionary-backed integrity checks for user-visible search paths and RH-003 regression tests that prove results come from the approved dictionary while uncommon valid words remain available. |
+| High | Ranking / search quality | Useful target words can be ranked behind very short or less useful words. For `aelpp`, `apple` is not ranked first in the core search candidate order; the probe returned `la`, `al`, `el`, `le`, then `apple`. | `rankWords()` sorts frequency before length; tests only assert `apple` inclusion, not useful ranking. WQ-004 allows common/frequent/longer/useful ordering but requires uncommon valid dictionary-backed words to remain available. | Define and test ranking expectations for core letter searches, including `aelpp` and `stream`, without removing valid uncommon dictionary words solely because they are uncommon. |
 | High | SEO / canonicals | Canonical URLs are absent across major observed pages. | `rg -n "canonical|alternates" app` returned no matches. Runtime smoke checks for `/`, `/word-finder`, `/words-from-letters`, `/unscramble/aelpp`, `/words-from-letters/aelpp`, `/word-length/5`, `/words-starting-with/a`, `/words-ending-with/ing`, and `/words-with-pattern/a__le` returned HTTP 200 but no `rel="canonical"`. SEO-002 requires canonical URLs. | Add route-level or layout-level canonical metadata that emits correct canonical URLs for static and dynamic routes. |
 | High | SEO / sitemap coverage | Sitemap coverage omits implemented major routes and route families. | `app/sitemap.ts` includes home, `/words-from-letters`, `/unscramble/{signature}`, `/words-from-letters/{signature}`, starting-letter pages, four ending pages, and length pages, but does not include `/word-finder` or `/words-with-pattern/[pattern]`. SEO-003 requires sitemap coverage, and Release 3 calls for sitemap coverage validation. | Add `/word-finder` and appropriate pattern-route sitemap entries or explicitly document why they should be excluded from indexing. |
 | High | Regression testing | The only regression test file is not executable through the attempted direct command, and no npm test script exists. | `package.json` defines `dev`, `build`, `start`, and `lint`, but no `test` script. `npx ts-node --project tsconfig.json --transpile-only -r tsconfig-paths/register tests/unscrambleSearch.test.ts` failed with `Cannot find package '@/lib'`. TR-005 requires checks before PR creation and Release 4 requires expanded regression guardrails. | Add a reliable test runner/script that supports TypeScript and the `@/` alias, then wire it into release checks. |
@@ -62,7 +62,7 @@
 | Low | Technical debt | Search and word-quality logic is duplicated between `wordStore.ts` and `wordsFromLetters.ts`. | Both files implement letter cleaning, letter counting, buildability checks, and filtering/ranking orchestration. | Consolidate shared engine helpers after regression coverage is in place. |
 
 ## Conflicts and Gaps
-- Source-of-truth conflict: word-quality rules and regression history say low-value abbreviations/fragments should remain excluded, but compiled data and core search output still contain and surface rule-listed examples.
+- Source-of-truth gap: word-quality rules and regression history require dictionary-backed result integrity, but compiled data and core search output need tests proving every returned result is source-backed and that uncommon valid source words are preserved.
 - Source-of-truth conflict: SEO rules require canonicals, but implementation and runtime HTML checks show no canonical tags.
 - Source-of-truth conflict: sitemap coverage is required, but implemented major pages and route families are omitted from `app/sitemap.ts`.
 - Test gap: regression tests cannot be treated as release-ready evidence until there is a reliable command/script that runs them with path aliases.
@@ -77,7 +77,7 @@
 - Low: 2
 
 ## Required Actions
-- Remove or suppress low-value abbreviations/fragments from all user-visible core search outputs and add RH-003 regression coverage.
+- Enforce dictionary-backed result integrity across user-visible core search outputs and add RH-003 regression coverage that does not remove valid uncommon dictionary words solely because they are uncommon.
 - Define ranking acceptance criteria and protect them with tests for common examples such as `aelpp`, `listen`, and `stream`.
 - Add canonical URL metadata for every major static and dynamic route.
 - Expand sitemap coverage to include implemented major routes or document intentional exclusions.
@@ -89,10 +89,10 @@
 ## Release Readiness Decision
 Not ready.
 
-Release 1.1 should not be approved for release until the Critical word-quality/business-rule violation is fixed and the High SEO and regression-test blockers are addressed or explicitly deferred by product decision. Lint and build passing are positive signals, but they are not sufficient because current evidence shows source-of-truth conflicts against product rules and incomplete regression protection.
+Release 1.1 should not be approved for release until the Critical dictionary-backed integrity/business-rule violation is fixed and the High SEO and regression-test blockers are addressed or explicitly deferred by product decision. Lint and build passing are positive signals, but they are not sufficient because current evidence shows source-of-truth conflicts against product rules and incomplete regression protection.
 
 ## Required Actions Before Release
-- Blocker: fix low-value word leakage in core unscramble outputs and add regression tests for RH-003.
+- Blocker: enforce dictionary-backed result integrity in core unscramble outputs and add regression tests for RH-003.
 - Blocker: implement canonical URLs for major routes or document an explicit rule change deferring SEO-002.
 - Blocker: correct sitemap coverage for major routes or document intentional noindex/exclusion decisions.
 - Blocker: provide a passing regression-test command and update tests to cite rule IDs.

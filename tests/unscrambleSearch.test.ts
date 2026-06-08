@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getFilteredUnscramble } from "@/lib/engine/wordStore";
+import { getAllWords, getFilteredUnscramble } from "@/lib/engine/wordStore";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -94,6 +94,33 @@ test("SB-004/SB-005/FLT-006/RH-002/TR-004: blank filters and placeholders do not
   assert.ok(
     !threeLetterWords.every((word) => word.includes("ea")),
     "Contains placeholder text should not be applied when the filter is blank"
+  );
+});
+
+
+test("WQ-001/WQ-002/WQ-003/DD-002/DD-004/DD-005/RH-003/TR-004: dictionary-backed uncommon words remain available without generated strings", () => {
+  const approvedWords = new Set(getAllWords());
+
+  for (const letters of ["eta", "ers", "ems", "ret"]) {
+    const words = getFilteredUnscramble(letters);
+
+    assert.ok(words.length > 0, `expected ${letters} to return dictionary-backed words`);
+    assert.ok(
+      words.every((word) => approvedWords.has(word)),
+      `expected every ${letters} result to be present in the approved dictionary source`
+    );
+  }
+
+  for (const word of ["eta", "tae", "ers", "ems", "ret"]) {
+    assert.ok(
+      getFilteredUnscramble(word).includes(word),
+      `expected uncommon approved dictionary word ${word} to remain available`
+    );
+  }
+
+  assert.ok(
+    !getFilteredUnscramble("zzq").includes("zzq"),
+    "expected generated/non-dictionary strings to remain excluded"
   );
 });
 
