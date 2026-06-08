@@ -35,6 +35,12 @@ function isValidWord(word: string) {
   );
 }
 
+function generatePatterns(word: string) {
+  return word.split("").map((_, index) =>
+    `${word.slice(0, index)}_${word.slice(index + 1)}`
+  );
+}
+
 function addToMap(map: WordMap, key: string, word: string) {
   if (!map[key]) {
     map[key] = [];
@@ -102,11 +108,17 @@ const signatureMap: WordMap = {};
 const startsWithMap: WordMap = {};
 const endsWithMap: WordMap = {};
 const lengthMap: WordMap = {};
+// Pattern search is a full approved-source index to satisfy WQ-001/DD-002/DD-007.
+const patternIndex: WordMap = {};
 
 for (const word of sortedWords) {
   addToMap(signatureMap, signature(word), word);
   addToMap(startsWithMap, word[0], word);
   addToMap(lengthMap, String(word.length), word);
+
+  for (const pattern of generatePatterns(word)) {
+    addToMap(patternIndex, pattern, word);
+  }
 
   for (let suffixLength = 1; suffixLength <= Math.min(5, word.length); suffixLength++) {
     addToMap(endsWithMap, word.slice(-suffixLength), word);
@@ -117,6 +129,7 @@ sortMapValues(signatureMap);
 sortMapValues(startsWithMap);
 sortMapValues(endsWithMap);
 sortMapValues(lengthMap);
+sortMapValues(patternIndex);
 
 fs.writeFileSync(
   path.join("data", "source", "words.txt"),
@@ -128,6 +141,7 @@ writeJson("signatureMap.json", signatureMap);
 writeJson("startsWithMap.json", startsWithMap);
 writeJson("endsWithMap.json", endsWithMap);
 writeJson("lengthMap.json", lengthMap);
+writeJson("patternIndex.json", patternIndex);
 writeJson("frequencyMap.json", frequencyMap);
 writeJson("definitions.json", definitions);
 
@@ -135,3 +149,4 @@ console.log("✅ Dictionary indexes built successfully");
 console.log(`Words: ${sortedWords.length}`);
 console.log(`Definitions: ${Object.keys(definitions).length}`);
 console.log(`Frequencies: ${Object.keys(frequencyMap).length}`);
+console.log(`Patterns: ${Object.keys(patternIndex).length}`);
