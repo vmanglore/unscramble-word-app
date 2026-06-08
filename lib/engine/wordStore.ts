@@ -29,6 +29,37 @@ function cleanLetters(value = "") {
   return value.toLowerCase().replace(/[^a-z]/g, "");
 }
 
+function cleanLengthFilter(length: WordFinderFilters["length"]): string {
+  return length ? String(length).replace(/[^0-9]/g, "") : "";
+}
+
+function countLetters(value: string): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  for (const letter of value) {
+    counts[letter] = (counts[letter] ?? 0) + 1;
+  }
+
+  return counts;
+}
+
+function canBuildWordFromCounts(
+  word: string,
+  availableCounts: Record<string, number>
+): boolean {
+  const usedCounts: Record<string, number> = {};
+
+  for (const letter of word) {
+    usedCounts[letter] = (usedCounts[letter] ?? 0) + 1;
+
+    if (usedCounts[letter] > (availableCounts[letter] ?? 0)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function getAllWords(): string[] {
   return Array.from(new Set(Object.values(lengthMap).flat()));
 }
@@ -66,7 +97,7 @@ export function filterWords(
   words: string[],
   { length, startsWith = "", endsWith = "", contains = "", limit }: WordFinderFilters = {}
 ): string[] {
-  const cleanLength = length ? String(length).replace(/[^0-9]/g, "") : "";
+  const cleanLength = cleanLengthFilter(length);
   const cleanStartsWith = cleanLetters(startsWith);
   const cleanEndsWith = cleanLetters(endsWith);
   const cleanContains = cleanLetters(contains);
@@ -95,9 +126,7 @@ export function filterWords(
 }
 
 export function findWords(filters: WordFinderFilters = {}): string[] {
-  const cleanLength = filters.length
-    ? String(filters.length).replace(/[^0-9]/g, "")
-    : "";
+  const cleanLength = cleanLengthFilter(filters.length);
 
   const numericLength = Number(cleanLength);
 
@@ -130,7 +159,24 @@ export function getFilteredUnscramble(
   letters = "",
   filters: WordFinderFilters = {}
 ): string[] {
-  return filterWords(getUnscramble(letters), filters);
+  const cleanAvailableLetters = cleanLetters(letters);
+  const cleanLength = cleanLengthFilter(filters.length);
+
+  if (!cleanAvailableLetters) {
+    return [];
+  }
+
+  if (cleanLength) {
+    const candidates = lengthMap[cleanLength] ?? [];
+    const availableCounts = countLetters(cleanAvailableLetters);
+    const buildableWords = candidates.filter((word) =>
+      canBuildWordFromCounts(word, availableCounts)
+    );
+
+    return filterWords(buildableWords, filters);
+  }
+
+  return filterWords(getUnscramble(cleanAvailableLetters), filters);
 }
 
 /* ---------------------------
