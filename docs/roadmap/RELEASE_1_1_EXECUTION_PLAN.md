@@ -8,7 +8,7 @@ Release 1.1 is ready only when:
 
 - Regression tests can be run through a reliable release command.
 - Tests explicitly map behavior to product rule IDs.
-- Core search results prioritize meaningful English words and suppress known low-value fragments.
+- Core search results are backed by the approved dictionary source, never generated arbitrarily, and keep uncommon valid dictionary words available.
 - Ranking behavior is defined, tested, and aligned with human usefulness.
 - Major pages emit canonical URLs and are represented in sitemap policy.
 - The product decision for `/unscramble/[letters]` search semantics is documented and protected by tests.
@@ -29,7 +29,7 @@ This plan is based on the following source hierarchy and evidence:
 | Priority | Workstream | Release Purpose | Risk | Must Ship in 1.1? |
 | --- | --- | --- | --- | --- |
 | P0 | Regression test foundation | Create trustworthy proof before changing behavior. | High | Yes |
-| P1 | Word-quality rule enforcement | Resolve the Critical business-rule violation. | Critical | Yes |
+| P1 | Dictionary-backed result integrity | Resolve the Critical business-rule violation. | Critical | Yes |
 | P2 | Ranking improvements | Make top results useful and prevent RH-005 regressions. | High | Yes |
 | P3 | Canonical URLs | Satisfy SEO-002 for major pages. | High | Yes |
 | P4 | Sitemap coverage | Satisfy SEO-003 or document intentional exclusions. | High | Yes |
@@ -41,14 +41,14 @@ This plan is based on the following source hierarchy and evidence:
 
 ```text
 P0 Regression test foundation
-  ├── blocks P1 word-quality enforcement
+  ├── blocks P1 dictionary-backed result integrity
   ├── blocks P2 ranking improvements
   ├── blocks P3 canonical URL verification
   ├── blocks P4 sitemap verification
   ├── blocks P5 search-behavior decision tests
   └── should precede P6/P7 implementation changes
 
-P1 Word-quality rule enforcement
+P1 Dictionary-backed result integrity
   └── blocks final P2 ranking validation because ranking must not promote excluded entries
 
 P2 Ranking improvements
@@ -116,36 +116,39 @@ P7 Technical debt cleanup
 
 ---
 
-### Task 2 — Enforce Word-Quality Rules Across User-Visible Search Results
+### Task 2 — Enforce Dictionary-Backed Result Integrity Across User-Visible Search Results
 
 **Priority:** P1  
 **Risk level:** Critical  
-**Primary objective:** Resolve the Critical Release 1.1 audit finding that low-value abbreviations/fragments appear in core search results.
+**Primary objective:** Resolve the Critical Release 1.1 audit finding by ensuring user-visible search results are backed by the approved dictionary source, without broadly removing obscure but valid dictionary words.
 
 #### Scope
 
-- Define a single shared displayability/word-quality rule for user-visible search output.
-- Suppress or remove known low-value examples from all user-visible core search paths unless explicitly approved by product rules.
-- Ensure search indexes and source dictionary behavior remain consistent after filtering.
-- Do not rely on UI-only hiding if APIs or dynamic routes can still expose excluded words as normal results.
+- Define a single shared dictionary-backed result integrity rule for user-visible search output.
+- Prevent invalid/generated/non-dictionary strings from all user-visible core search paths.
+- Keep valid dictionary-backed words available even when they are uncommon, rare, or surprising to casual users.
+- Ensure abbreviations, acronyms, and fragments are included or excluded according to the approved dictionary/source policy, not guessed by implementation.
+- Ensure search indexes and source dictionary behavior remain consistent after any filtering.
+- Do not rely on UI-only hiding if APIs or dynamic routes can still expose invalid results as normal results.
 
 #### Dependencies
 
 - Depends on Task 1 so RH-003 and dictionary-quality regressions are protected before behavior changes.
-- Should complete before Task 3 ranking validation, because ranking must not rank entries that should be excluded.
+- Should complete before Task 3 ranking validation, because ranking must operate on dictionary-backed results and must not be used as a substitute for source validation.
 
 #### Acceptance Criteria
 
-- Core homepage/API search does not return rule-listed low-value examples such as `mr`, `sr`, `rt`, `rs`, or `mt` for relevant inputs.
-- User-visible `words-from-letters` behavior uses the same word-quality policy or documents a tested reason for any intentional difference.
-- Dictionary/index data and runtime filtering do not conflict with DD-003/DD-005.
-- No approved meaningful examples from rules, such as `stream`, `master`, `steam`, `teams`, and `stare`, are removed by the quality filter.
+- Core homepage/API search returns only words backed by the approved dictionary source for relevant inputs.
+- Core homepage/API search does not return arbitrary/generated/non-dictionary strings.
+- User-visible `words-from-letters` behavior uses the same dictionary-backed integrity policy or documents a tested reason for any intentional difference.
+- Dictionary/index data and runtime filtering do not conflict with DD-003/DD-005/DD-007.
+- Approved dictionary-backed examples from rules, such as `stream`, `master`, `steam`, `teams`, `stare`, `eta`, `tae`, `ers`, `ems`, and `ret`, remain available when buildable and present in the approved source.
 - The behavior is documented in tests with PP/WQ/DD/RH rule references.
 
 #### Regression Tests Required
 
-- RH-003 test asserting low-value examples (`mr`, `sr`, `rt`, `rs`, `mt`) are absent from core search outputs.
-- Word-quality inclusion tests asserting meaningful examples remain available when buildable.
+- RH-003 test asserting core search outputs are drawn from the approved dictionary source and do not include generated/non-dictionary strings.
+- WQ-002/DD-004 inclusion tests asserting uncommon valid dictionary-backed examples remain available when buildable.
 - API-level or engine-level tests for the same policy, depending on the chosen test harness.
 - Dictionary/index consistency check if compiled data is modified.
 
@@ -170,20 +173,20 @@ P7 Technical debt cleanup
 #### Scope
 
 - Define ranking expectations for letter-entry searches.
-- Adjust ranking so common/frequent/longer/useful words are not buried under very short words or fragments.
+- Adjust ranking so common/frequent/longer/useful words are prioritized without suppressing uncommon valid dictionary-backed words.
 - Keep ranking deterministic.
-- Avoid maximizing count at the expense of result quality.
+- Avoid maximizing count at the expense of result quality, but do not reduce count by removing valid dictionary-backed words solely because they are uncommon.
 
 #### Dependencies
 
 - Depends on Task 1.
-- Should follow Task 2 so excluded low-value words do not distort ranking tests.
+- Should follow Task 2 so invalid/generated/non-dictionary strings do not distort ranking tests.
 
 #### Acceptance Criteria
 
 - For `aelpp`, `apple` appears in the top useful-results position according to the documented ranking rule.
 - For `listen`, expected words such as `listen`, `silent`, and `enlist` are available and ordered deterministically.
-- For `stream`, meaningful words such as `stream`, `master`, `steam`, `teams`, and `stare` outrank short or low-value entries when present.
+- For `stream`, useful words such as `stream`, `master`, `steam`, `teams`, and `stare` are prioritized deterministically when present.
 - Ranking criteria are documented in tests and map to WQ-004/RH-005.
 - Ranking changes do not break subset search, exact anagram inclusion, length filters, blank filters, or combined filters.
 
@@ -444,7 +447,7 @@ P7 Technical debt cleanup
 | Regression harness | `npm test` or documented equivalent passes locally and in CI/release workflow. |
 | Lint/build | `npm run lint` and `npm run build` pass. |
 | Search behavior | Exact anagram, subset search, long-input subset search, blank filters, placeholder handling, and combined filters pass. |
-| Word quality | Known low-value words are absent; meaningful examples remain available. |
+| Dictionary-backed integrity | Invalid/generated/non-dictionary strings are absent; uncommon and useful dictionary-backed examples remain available. |
 | Ranking | `aelpp`, `listen`, and `stream` ranking expectations pass deterministically. |
 | Words from letters | Buildability, grouping, filtering, and quality policy are tested. |
 | Canonicals | Representative static and dynamic pages emit expected canonical URLs. |
@@ -457,7 +460,7 @@ P7 Technical debt cleanup
 Release 1.1 may be approved only when all of the following are true:
 
 1. All P0-P5 tasks are complete or an explicit product-owner decision documents a scoped deferral with risk acceptance.
-2. The Critical word-quality finding from the Release 1.1 audit is fixed and protected by RH-003 regression tests.
+2. The Critical dictionary-backed result integrity finding from the Release 1.1 audit is fixed and protected by RH-003 regression tests.
 3. High-priority ranking, canonical, sitemap, and regression-test blockers are fixed or formally reclassified with written rationale.
 4. `npm test`, `npm run lint`, and `npm run build` pass on the release branch.
 5. Representative runtime smoke checks pass for `/`, `/word-finder`, `/words-from-letters`, `/unscramble/aelpp`, `/words-from-letters/aelpp`, `/word-length/5`, `/words-starting-with/a`, `/words-ending-with/ing`, `/words-with-pattern/a__le`, `/sitemap.xml`, and `/robots.txt`.
