@@ -24,6 +24,7 @@ const endsWithMap: WordMap = endsWithRaw;
 const lengthMap: WordMap = lengthRaw;
 const frequencyMap: FrequencyMap = frequencyRaw;
 const definitions: DefinitionMap = definitionsRaw;
+const buildableWordsCache = new Map<string, string[]>();
 
 function cleanLetters(value = "") {
   return value.toLowerCase().replace(/[^a-z]/g, "");
@@ -155,6 +156,29 @@ export function getUnscramble(letters = ""): string[] {
   return rankWords(signatureMap[key] ?? []);
 }
 
+function getBuildableWords(letters: string, length = ""): string[] {
+  const cacheKey = `${letters.split("").sort().join("")}:${length}`;
+  const cachedWords = buildableWordsCache.get(cacheKey);
+
+  if (cachedWords) {
+    return cachedWords;
+  }
+
+  const availableCounts = countLetters(letters);
+  const candidates = length
+    ? lengthMap[length] ?? []
+    : Object.entries(lengthMap).flatMap(([wordLength, words]) =>
+        Number(wordLength) <= letters.length ? words : []
+      );
+  const buildableWords = rankWords(
+    candidates.filter((word) => canBuildWordFromCounts(word, availableCounts))
+  );
+
+  buildableWordsCache.set(cacheKey, buildableWords);
+
+  return buildableWords;
+}
+
 export function getFilteredUnscramble(
   letters = "",
   filters: WordFinderFilters = {}
@@ -166,17 +190,10 @@ export function getFilteredUnscramble(
     return [];
   }
 
-  if (cleanLength) {
-    const candidates = lengthMap[cleanLength] ?? [];
-    const availableCounts = countLetters(cleanAvailableLetters);
-    const buildableWords = candidates.filter((word) =>
-      canBuildWordFromCounts(word, availableCounts)
-    );
-
-    return filterWords(buildableWords, filters);
-  }
-
-  return filterWords(getUnscramble(cleanAvailableLetters), filters);
+  return filterWords(
+    getBuildableWords(cleanAvailableLetters, cleanLength),
+    filters
+  );
 }
 
 /* ---------------------------

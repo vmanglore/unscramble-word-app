@@ -26,6 +26,27 @@ function assertCanBuild(word: string, letters: string) {
   }
 }
 
+const alphabetWordsWithoutFilters = getFilteredUnscramble(alphabet);
+
+assert.ok(
+  alphabetWordsWithoutFilters.length > 0,
+  "expected alphabet search without filters to return buildable words"
+);
+alphabetWordsWithoutFilters.forEach((word) => assertCanBuild(word, alphabet));
+
+const appleWords = getFilteredUnscramble("aelpp");
+
+assert.ok(appleWords.includes("apple"), "expected aelpp to include apple");
+
+const listenWords = getFilteredUnscramble("listen");
+
+for (const word of ["listen", "silent", "enlist"]) {
+  assert.ok(
+    listenWords.includes(word),
+    `expected listen results to include ${word} when available`
+  );
+}
+
 for (const length of [2, 3, 4, 5, 6, 7, 8, 9, 10]) {
   const words = getFilteredUnscramble(alphabet, {
     length,
