@@ -40,6 +40,12 @@ function signature(word: string) {
   return word.split("").sort().join("");
 }
 
+function generatePatterns(word: string) {
+  return word.split("").map((_, index) =>
+    `${word.slice(0, index)}_${word.slice(index + 1)}`
+  );
+}
+
 function addToMap(map: WordMap, key: string, word: string) {
   if (!map[key]) {
     map[key] = [];
@@ -122,11 +128,16 @@ function buildExpectedCompiledData() {
   const startsWithMap: WordMap = {};
   const endsWithMap: WordMap = {};
   const lengthMap: WordMap = {};
+  const patternIndex: WordMap = {};
 
   for (const word of sortedWords) {
     addToMap(signatureMap, signature(word), word);
     addToMap(startsWithMap, word[0], word);
     addToMap(lengthMap, String(word.length), word);
+
+    for (const pattern of generatePatterns(word)) {
+      addToMap(patternIndex, pattern, word);
+    }
 
     for (let suffixLength = 1; suffixLength <= Math.min(5, word.length); suffixLength++) {
       addToMap(endsWithMap, word.slice(-suffixLength), word);
@@ -137,6 +148,7 @@ function buildExpectedCompiledData() {
   sortMapValues(startsWithMap);
   sortMapValues(endsWithMap);
   sortMapValues(lengthMap);
+  sortMapValues(patternIndex);
 
   return {
     approvedWords: words,
@@ -144,6 +156,7 @@ function buildExpectedCompiledData() {
     startsWithMap,
     endsWithMap,
     lengthMap,
+    patternIndex,
     frequencyMap,
   };
 }
@@ -209,4 +222,34 @@ test("WQ-001/DD-003/DD-007/TR-004: compiled maps contain only valid alphabetic w
   }
 
   assertCompiledWordsAreValid("frequencyMap.json", Object.keys(frequencyMap));
+});
+
+test("WQ-001/DD-002/DD-007/RH-003/TR-004: pattern index is fully regenerated from approved source words", () => {
+  const expected = buildExpectedCompiledData();
+  const patternIndex = readJson<WordMap>(path.join(COMPILED_DIR, "patternIndex.json"));
+  const patternWords = getWordMapWords(patternIndex);
+
+  assert.deepEqual(
+    patternIndex,
+    expected.patternIndex,
+    "patternIndex.json must be a full approved-source-derived wildcard index"
+  );
+
+  assertStringSetEqual(
+    patternWords,
+    expected.approvedWords,
+    "patternIndex.json results must all be backed by the normalized approved dictionary source"
+  );
+
+  for (const staleWord of ["amble", "inlets", "peal", "tamers"]) {
+    assert.ok(
+      !patternWords.has(staleWord),
+      `patternIndex.json must not expose stale non-source word ${staleWord}`
+    );
+  }
+
+  assert.ok(
+    patternIndex["a_le"]?.includes("able"),
+    "patternIndex.json should include full-source approved words, not legacy/demo subsets"
+  );
 });
