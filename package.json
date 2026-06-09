@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:dictionary": "ts-node scripts/buildIndex.ts",
     "start": "next start",
     "lint": "eslint",
     "test": "cross-env TS_NODE_TRANSPILE_ONLY=true TS_NODE_PROJECT=tests/tsconfig.json node --test --require ts-node/register --require ./tests/registerPathAlias.cjs tests/*.test.ts"
