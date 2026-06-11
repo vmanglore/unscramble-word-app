@@ -1,405 +1,142 @@
-# Strategic Backlog: Word Pattern & Language Collections
+# Long-Term Roadmap
 
 ## Purpose
 
-Capture future opportunities that align with the long-term vision of becoming a Word Discovery Platform.
+Describe the long-term vision, strategic direction, and multi-year evolution for Unscramble Word Now.
 
-These ideas are intentionally not assigned to specific releases yet.
+This document defines the destination. Detailed backlog items and unscheduled feature ideas belong in:
 
-They should be evaluated periodically based on:
+- [docs/roadmap/FEATURE_BACKLOG.md](roadmap/FEATURE_BACKLOG.md)
+- [docs/roadmap/FUTURE_IDEAS.md](roadmap/FUTURE_IDEAS.md)
 
-* User demand
-* Search trends
-* Educational value
-* SEO potential
-* Platform maturity
+## Long-Term Vision
 
----
+Unscramble Word Now should evolve from a focused unscramble utility into a fast, trustworthy word discovery platform.
 
-# Word Pattern Collections
+The product should help users move from a clue, letter set, pattern, or curiosity to useful English words with minimal effort. Over time, the platform should support not only direct lookup, but also ranking, exploration, relationships, metadata, and educational discovery.
 
-## Palindromes
+## Strategic Direction
 
-Words or phrases that read the same forwards and backwards.
+### 1. Protect The Core Search Experience
 
-Examples:
+The first long-term priority is preserving the fast, simple search experience that makes the product useful. Future features should not slow down core lookup, confuse casual users, or weaken result quality.
 
-* level
-* radar
-* racecar
-* madam
+### 2. Build A Reusable Word Knowledge Layer
 
-Potential Future Features:
+The platform should become more valuable through structured word intelligence:
 
-* Palindrome collections
-* Palindrome challenges
-* Longest palindromes
-* Daily palindrome puzzles
+- Definitions.
+- Frequency.
+- Difficulty.
+- Popularity.
+- Word-game scores.
+- Letter composition.
+- Patterns.
+- Relationships.
+- Recommended ranking.
 
----
+This knowledge layer should support multiple features without duplicating data or business logic.
 
-## Semordnilaps
+### 3. Improve Ranking And Discovery
 
-Words that form a different valid word when reversed.
+Long-term differentiation should come from helping users find the right word faster. Ranking, grouping, filtering, and related-word discovery should reduce scanning effort and make large result sets easier to use.
 
-Examples:
+### 4. Expand Search Utilities Before Specialized Profiles
 
-* stressed → desserts
-* drawer → reward
-* live → evil
-* dog → god
-
-Potential Future Features:
-
-* Reverse word explorer
-* Semordnilap collections
-* Reverse word challenges
-
----
-
-## Anagrams
-
-Words created by rearranging letters.
+Reusable infrastructure should come before profile-specific experiences.
 
 Examples:
 
-* listen → silent
-* earth → heart
-* secure → rescue
+- Build the ranking engine before profile-specific ranking.
+- Build the knowledge layer before dictionary profiles.
+- Build shared filtering before game-specific modes.
 
-Potential Future Features:
+### 5. Grow Through Useful Discovery Collections
 
-* Anagram explorer
-* Daily anagram challenge
-* Multi-word anagrams
+Once the platform foundation is stable, the product can expand into curated word pattern, language, educational, and category collections. These should create useful discovery paths, not thin page volume.
 
----
+Examples of future collection areas are tracked in [FEATURE_BACKLOG.md](roadmap/FEATURE_BACKLOG.md) and [FUTURE_IDEAS.md](roadmap/FUTURE_IDEAS.md).
 
-## Pangrams
+### 6. Stay Open Source First
 
-Sentences that contain every letter of the alphabet.
+Dictionary and metadata strategy should prefer open, automation-friendly sources such as Wiktionary, Wordfreq, SCOWL, and ENABLE before commercial dependencies.
 
-Examples:
+Commercial data should be considered only when it provides clear value that open sources cannot reasonably provide.
 
-* The quick brown fox jumps over the lazy dog.
+## Multi-Year Evolution
 
-Potential Future Features:
+### Foundation Phase
 
-* Pangram collections
-* Pangram builder
-* Pangram challenges
+Focus:
 
----
+- Production readiness.
+- Regression protection.
+- SEO validation.
+- Stable route families.
+- Fast JSON-backed lookup.
+- Clear product and business rules.
 
-## Ambigrams
+Outcome:
 
-Words that maintain meaning when rotated, reflected, or viewed differently.
+The product is reliable, testable, and safe to extend.
 
-Potential Future Features:
+### Intelligence Phase
 
-* Visual word exploration
-* Educational language content
-* Design-oriented word collections
+Focus:
 
----
+- Ranking improvements.
+- Better result grouping.
+- Metadata enrichment.
+- Dictionary quality controls.
+- Shared knowledge-layer foundations.
 
-## Tautonyms
+Outcome:
 
-Words consisting of repeated components.
+Users find useful words faster, and future features can reuse the same intelligence layer.
 
-Examples:
+### Discovery Phase
 
-* bye-bye
-* goody-goody
+Focus:
 
-Biological Examples:
+- Word pattern collections.
+- Educational collections.
+- Related-word exploration.
+- High-intent SEO pages backed by real value.
+- Mobile-first browsing and filtering experiences.
 
-* Gorilla gorilla
-* Bison bison
+Outcome:
 
-Potential Future Features:
+The product becomes a broader word discovery platform, not only a search tool.
 
-* Tautonym collections
-* Fun language facts
+### Specialization Phase
 
----
+Focus:
 
-## Lipograms
+- Game-specific modes.
+- Advanced filters.
+- User preferences.
+- Personalized workflows if justified by demand.
 
-Writing that intentionally excludes one or more letters.
+Outcome:
 
-Examples:
+Specialized experiences build on shared ranking, metadata, and search infrastructure rather than separate logic paths.
 
-* Stories written without the letter "e"
+## Strategic Evaluation Criteria
 
-Potential Future Features:
+Long-term initiatives should be evaluated by:
 
-* Lipogram challenges
-* Writing exercises
-* Educational activities
+- User demand.
+- Search trends.
+- Educational value.
+- SEO potential.
+- Platform maturity.
+- Mobile experience.
+- Reusability.
+- Maintainability.
+- Long-term differentiation.
 
----
-
-# Letter Pattern Collections
-
-## Isograms
-
-Words with no repeated letters.
-
-Examples:
-
-* brick
-* lamp
-* dialogue
-
----
-
-## Heterograms
-
-Words where no letter appears more than once.
-
-Examples:
-
-* jumps
-* brick
-
----
-
-## Double Letter Words
-
-Examples:
-
-* apple
-* coffee
-* success
-
----
-
-## Triple Letter Patterns
-
-Examples:
-
-* committee
-* bookkeeping
-
----
-
-## All-Vowel Words
-
-Examples:
-
-* sequoia
-* education
-
----
-
-## Words Without Traditional Vowels
-
-Examples:
-
-* rhythm
-* crypt
-* myths
-
----
-
-# Linguistic Curiosity Collections
-
-## Homophones
-
-Examples:
-
-* pair / pear
-* knight / night
-
----
-
-## Homographs
-
-Examples:
-
-* lead
-* tear
-
----
-
-## Heteronyms
-
-Examples:
-
-* wind
-* tear
-
----
-
-## Contronyms
-
-Words that have opposite meanings.
-
-Examples:
-
-* sanction
-* oversight
-
----
-
-## Oxymorons
-
-Examples:
-
-* deafening silence
-* bittersweet
-
----
-
-## Portmanteaus
-
-Examples:
-
-* brunch
-* smog
-* motel
-
----
-
-## Onomatopoeia
-
-Examples:
-
-* buzz
-* hiss
-* splash
-
----
-
-# Discovery Collections
-
-## Rare Words
-
-Examples:
-
-* sonder
-* petrichor
-
----
-
-## Beautiful Words
-
-Examples:
-
-* serendipity
-* eloquence
-
----
-
-## Longest Words
-
-Examples:
-
-* pneumonoultramicroscopicsilicovolcanoconiosis
-
----
-
-## Shortest Words
-
-Examples:
-
-* qi
-* za
-* ax
-
----
-
-## Difficult Words
-
-Examples:
-
-* sesquipedalian
-* antidisestablishmentarianism
-
----
-
-# Educational Collections
-
-## Words By Origin
-
-Examples:
-
-* Latin origin
-* Greek origin
-* Sanskrit origin
-
----
-
-## Borrowed Words
-
-Examples:
-
-* karaoke
-* tsunami
-* bungalow
-
----
-
-## Shakespeare-Invented Words
-
-Potential collection.
-
----
-
-## Words By Era
-
-Examples:
-
-* Old English
-* Modern English
-* Contemporary slang
-
----
-
-# Category Collections
-
-## Animals
-
-## Food
-
-## Nature
-
-## Science
-
-## Sports
-
-## Geography
-
-## Technology
-
-## Space
-
-Potential Future Features:
-
-* Category explorers
-* Learning modules
-* Kids educational content
-
----
-
-# Future Evaluation Criteria
-
-Before implementing any collection:
-
-1. Does it align with the Explore Words vision?
-2. Does it create discovery opportunities?
-3. Does it provide educational value?
-4. Does it encourage exploration?
-5. Does it support long-term SEO growth?
-6. Does it make the platform more interesting?
-
-Only collections that satisfy most of these criteria should be prioritized.
-
----
-
-# Guiding Principle
+## Guiding Principle
 
 The goal is not to create thousands of pages.
 
-The goal is to create thousands of opportunities for discovery.
+The goal is to create thousands of useful opportunities for discovery.

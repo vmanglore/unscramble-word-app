@@ -8,7 +8,7 @@
 ## Sources Checked
 - Rules: `docs/rules/01-product-principles.md`, `docs/rules/02-search-behavior.md`, `docs/rules/03-word-quality.md`, `docs/rules/04-filters.md`, `docs/rules/05-seo.md`, `docs/rules/06-user-experience.md`, `docs/rules/07-data-dictionary.md`, `docs/rules/08-testing-regression.md`, `docs/rules/09-codex-workflow.md`, `docs/rules/10-regression-history.md`, `docs/rules/CODEX_AUDIT_RULES.md`.
 - Regression tests: `tests/unscrambleSearch.test.ts`; attempted direct execution with `npx ts-node --project tsconfig.json --transpile-only -r tsconfig-paths/register tests/unscrambleSearch.test.ts`.
-- Roadmap: `docs/roadmap/RELEASE_PLAN.md`, `docs/roadmap/RELEASE_HISTORY.md`, `docs/roadmap/FEATURE_BACKLOG.md`, `docs/roadmap/PRODUCT_VISION.md`, `docs/roadmap/release-2.md`.
+- Roadmap: `docs/roadmap/RELEASE_PLAN.md`, `docs/roadmap/RELEASE_HISTORY.md`, `docs/roadmap/FEATURE_BACKLOG.md`, `docs/roadmap/PRODUCT_VISION.md`, `docs/roadmap/RELEASE_2_PLAN.md`.
 - Implementation: `app/page.tsx`, `app/api/unscramble/route.ts`, `app/unscramble/[letters]/page.tsx`, `app/words-from-letters/page.tsx`, `app/words-from-letters/[letters]/page.tsx`, `app/word-finder/page.tsx`, `app/word-length/[length]/page.tsx`, `app/words-starting-with/[letter]/page.tsx`, `app/words-ending-with/[suffix]/page.tsx`, `app/words-with-pattern/[pattern]/page.tsx`, `app/layout.tsx`, `app/sitemap.ts`, `app/robots.ts`, `lib/engine/wordStore.ts`, `lib/engine/wordsFromLetters.ts`, `components/RelatedLinks.tsx`, `components/SiteHeader.tsx`, and compiled dictionary/index data where noted.
 - Commands/checks:
   - `npm run lint` — pass.

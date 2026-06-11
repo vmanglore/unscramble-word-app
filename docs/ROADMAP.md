@@ -1,33 +1,21 @@
-# UnscrambleWordNow Roadmap
+# Roadmap
 
-## Completed
+This file is the roadmap entry point. Detailed roadmap content lives under [docs/roadmap/](roadmap/) so release planning, backlog management, historical notes, and future ideas stay in their own documents.
 
-- GitHub repository created
-- Vercel deployment working
-- Domain registered: unscramblewordnow.com
-- DNS connected through Spaceship
-- Core routes working
-- Dynamic word pages deployed
-- Architecture documentation added
+## Roadmap Documents
 
-## Current Priority
+- [PRODUCT_VISION.md](roadmap/PRODUCT_VISION.md) - Product promise, target users, product pillars, quality bar, and long-term direction.
+- [RELEASE_PLAN.md](roadmap/RELEASE_PLAN.md) - Release-oriented view of completed, current, planned, and future work.
+- [FEATURE_BACKLOG.md](roadmap/FEATURE_BACKLOG.md) - Prioritized backlog items and promotion criteria.
+- [FUTURE_IDEAS.md](roadmap/FUTURE_IDEAS.md) - Unscheduled ideas, experiments, and future opportunities.
+- [RELEASE_HISTORY.md](roadmap/RELEASE_HISTORY.md) - Project and release timeline.
+- [RELEASE_1_2_PLAN.md](roadmap/RELEASE_1_2_PLAN.md) - Release 1.2 planning details.
 
-Production readiness and testing.
+## Related Strategic Planning
 
-## Next Steps
+- [LONGTERM_ROADMAP.md](LONGTERM_ROADMAP.md) - Long-term vision, strategic direction, and multi-year evolution.
+- [roadmap/RELEASE_2_PLAN.md](roadmap/RELEASE_2_PLAN.md) - Release 2 implementation specification.
 
-- Run Codex repository review
-- Validate SEO metadata
-- Validate sitemap.xml and robots.txt
-- Test all dynamic routes
-- Improve internal linking
-- Add Google Search Console
-- Submit sitemap to Google
+## Usage
 
-## Later
-
-- Add analytics
-- Add real trending words
-- Improve autocomplete ranking
-- Add testing suite
-- Consider AdSense after traffic starts
+Start here when orienting to product direction. Use the linked documents as the source of truth for detailed release scope, backlog items, historical context, and future planning.
