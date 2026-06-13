@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getUnscramble } from "@/lib/engine/wordStore";
+import { groupWordsByLength } from "@/lib/engine/wordsFromLetters";
 import RelatedLinks from "@/components/RelatedLinks";
 
 type Props = {
@@ -29,6 +30,7 @@ export default async function Page({ params }: Props) {
   const displayLetters = cleanLetters.toUpperCase();
 
   const words = getUnscramble(cleanLetters);
+  const groups = groupWordsByLength(words);
   const topResult = words[0];
   const hasSingleResult = words.length === 1;
   const detailWord = topResult || cleanLetters;
@@ -67,14 +69,27 @@ export default async function Page({ params }: Props) {
           {words.length === 0 ? (
             <p className="text-slate-500">No words found.</p>
           ) : (
-            <div className="flex flex-wrap gap-3">
-             {words.map((word) => (
-                <span
-                  key={word}
-                  className="px-4 py-2 bg-slate-100 rounded-xl text-slate-900 font-semibold text-lg"
+            <div className="space-y-6">
+              {groups.map((group) => (
+                <section
+                  key={group.length}
+                  className="border-t border-slate-200 pt-5 first:border-t-0 first:pt-0"
                 >
-                  {word}
-                </span>
+                  <h3 className="mb-3 text-lg font-semibold text-slate-900">
+                    {group.length} Letter Words ({group.words.length})
+                  </h3>
+
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                    {group.words.map((word) => (
+                      <span
+                        key={word}
+                        className="rounded-xl bg-slate-100 px-3 py-2 text-base font-semibold text-slate-900 sm:px-4 sm:text-lg"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           )}

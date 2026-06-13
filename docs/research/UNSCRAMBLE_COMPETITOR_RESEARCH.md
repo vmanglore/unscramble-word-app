@@ -243,6 +243,34 @@ Future Release:
 
 1.4+
 
+
+## Opportunity 6
+
+Strategic Decisions
+
+Description:
+
+Dictionary Strategy
+
+Examples:
+
+Decision: Open-Source-First Dictionary Strategy
+
+Selected Sources:
+* Wiktionary
+* Wordfreq
+* SCOWL
+* ENABLE
+
+Reasoning:
+* Automatable
+* No licensing constraints
+* Strong coverage
+* Supports long-term knowledge layer vision
+
+Status:
+Approved
+
 ---
 
 # Future Research Questions

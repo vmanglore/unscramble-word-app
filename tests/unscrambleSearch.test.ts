@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { getAllWords, getFilteredUnscramble } from "@/lib/engine/wordStore";
+import { groupWordsByLength } from "@/lib/engine/wordsFromLetters";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -144,4 +145,43 @@ test("FLT-007/RH-006/TR-004: combined filters use AND logic without changing sea
     "expected every result to satisfy length, startsWith, endsWith, and contains filters"
   );
   words.forEach((word) => assertCanBuild(word, alphabet));
+});
+
+test("RH-007: grouped results sort by descending word length while preserving group order", () => {
+  const words = ["ant", "zebra", "apple", "bee", "ox", "cat"];
+
+  assert.deepEqual(groupWordsByLength(words), [
+    { length: 5, words: ["zebra", "apple"] },
+    { length: 3, words: ["ant", "bee", "cat"] },
+    { length: 2, words: ["ox"] },
+  ]);
+});
+
+test("WQ-005/RH-003/RH-005: default unscramble display hides documented low-value short entries without deleting rare-word access", () => {
+  const defaultWords = getFilteredUnscramble("tislne");
+
+  for (const word of ["tis", "ie", "ei", "ln", "nl", "ls", "tn", "sl", "lt", "tl"]) {
+    assert.ok(
+      !defaultWords.includes(word),
+      `expected default display results to hide low-value short entry ${word}`
+    );
+  }
+
+  for (const word of ["in", "is", "it"]) {
+    assert.ok(
+      defaultWords.includes(word),
+      `expected common two-letter word ${word} to remain in default results`
+    );
+  }
+
+  const rareWords = getFilteredUnscramble("tislne", {
+    includeLowValueWords: true,
+  });
+
+  for (const word of ["tis", "ie", "ei", "ln", "nl", "ls", "tn", "sl", "lt", "tl"]) {
+    assert.ok(
+      rareWords.includes(word),
+      `expected rare-word access to preserve source-backed entry ${word}`
+    );
+  }
 });

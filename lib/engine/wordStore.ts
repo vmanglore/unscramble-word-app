@@ -4,6 +4,7 @@ import endsWithRaw from "@/data/compiled/endsWithMap.json";
 import lengthRaw from "@/data/compiled/lengthMap.json";
 import frequencyRaw from "@/data/compiled/frequencyMap.json";
 import definitionsRaw from "@/data/compiled/definitions.json";
+import { isDefaultDisplayWord } from "@/lib/engine/displayQuality";
 
 type WordMap = Record<string, string[]>;
 type FrequencyMap = Record<string, number>;
@@ -14,6 +15,7 @@ export type WordFinderFilters = {
   startsWith?: string;
   endsWith?: string;
   contains?: string;
+  includeLowValueWords?: boolean;
   limit?: number;
 };
 
@@ -190,10 +192,12 @@ export function getFilteredUnscramble(
     return [];
   }
 
-  return filterWords(
-    getBuildableWords(cleanAvailableLetters, cleanLength),
-    filters
-  );
+  const buildableWords = getBuildableWords(cleanAvailableLetters, cleanLength);
+  const displayableWords = filters.includeLowValueWords
+    ? buildableWords
+    : buildableWords.filter(isDefaultDisplayWord);
+
+  return filterWords(displayableWords, filters);
 }
 
 /* ---------------------------

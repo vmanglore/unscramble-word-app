@@ -1,149 +1,587 @@
 # Feature Backlog
 
-## Backlog Principles
+Version: 2.0
 
-Features should be prioritized by user value, search demand, educational value, SEO opportunity, performance impact, and alignment with the product rules.
+Status: Active
 
-The goal is not to create thousands of thin pages. The goal is to create thousands of useful opportunities for word discovery.
+Related Documents:
 
-## Priority 0 — Product Safety And Regression Guardrails
+* ROADMAP.md
+* RELEASE_PLAN.md
+* RELEASE_STATUS.md
+* STRATEGIC_POSITIONING.md
+* WORD_KNOWLEDGE_LAYER.md
+* SEO_OPPORTUNITY_MATRIX.md
 
-These items protect existing behavior and should be considered before broad feature expansion.
+---
 
-- Expand regression tests for subset search behavior.
-- Expand regression tests for length-filter behavior with long inputs.
-- Expand regression tests for blank and placeholder filter values.
-- Expand regression tests for combined filter AND logic.
-- Add tests that reference applicable business-rule IDs.
-- Validate dictionary updates through automated checks.
-- Prevent known low-value abbreviations and fragments from returning.
-- Keep `npm run lint` and `npm run build` passing before merge.
+# Purpose
 
-## Priority 1 — Production Readiness
+The Feature Backlog contains ideas, enhancements, and opportunities that may be implemented in future releases.
 
-- Run a full repository review.
-- Validate SEO metadata for all major pages.
-- Validate canonical URLs.
-- Validate sitemap coverage.
-- Validate robots configuration.
-- Test all dynamic routes.
-- Improve internal linking where discoverability is weak.
-- Add Google Search Console.
-- Submit sitemap to Google.
-- Review preview deployment before merging major work.
+Features listed here are not commitments.
 
-## Priority 2 — Core Search Quality
+They are candidates for future evaluation and prioritization.
 
-- Improve ranking so common and useful words appear ahead of obscure results.
-- Improve autocomplete ranking.
-- Evaluate real trending words instead of static homepage suggestions.
-- Review dictionary source quality.
-- Add dictionary quality checks that protect meaningful-word standards.
-- Consolidate overlapping search helper modules where it reduces maintenance risk.
-- Keep lookup architecture JSON-based unless a future need justifies a database.
+The roadmap defines what will be built.
 
-## Priority 3 — SEO And Discoverability Enhancements
+The backlog defines what might be built.
 
-- Improve internal links between related route families.
-- Add more contextual related searches where they help users continue discovery.
-- Expand route-level copy for high-intent pages without creating thin content.
-- Validate sitemap entries against implemented route families.
-- Monitor Search Console queries after setup to prioritize content updates.
+---
 
-## Priority 4 — Analytics And Growth
+# Backlog Management Rules
 
-- Add analytics after core production readiness is complete.
-- Track high-demand searches and zero-result searches.
-- Use analytics to identify missing dictionary or content opportunities.
-- Evaluate monetization only after traffic and user experience are stable.
-- Consider AdSense after meaningful traffic starts.
+A feature should only move from the backlog into the roadmap when:
 
-## Priority 5 — Word Pattern Collections
+* User value is clear
+* Strategic value is understood
+* Technical feasibility is confirmed
+* Priority exceeds competing opportunities
 
-Candidate collection features from the long-term roadmap:
+Features may remain in the backlog indefinitely.
 
-- Palindrome collections.
-- Palindrome challenges.
-- Longest palindromes.
-- Daily palindrome puzzles.
-- Reverse word explorer for semordnilaps.
-- Semordnilap collections.
-- Reverse word challenges.
-- Anagram explorer.
-- Daily anagram challenge.
-- Multi-word anagrams.
-- Pangram collections.
-- Pangram builder.
-- Pangram challenges.
-- Ambigram-oriented visual word exploration.
-- Tautonym collections.
-- Lipogram challenges and writing exercises.
+---
 
-## Priority 6 — Letter Pattern Collections
+# Prioritization Framework
 
-- Isogram words.
-- Heterogram words.
-- Double-letter words.
-- Triple-letter patterns.
-- All-vowel words.
-- Words without traditional vowels.
+Each feature should be evaluated against:
 
-## Priority 7 — Linguistic Curiosity Collections
+| Criteria              | Question                                     |
+| --------------------- | -------------------------------------------- |
+| User Value            | Does it solve a meaningful problem?          |
+| Strategic Value       | Does it support the platform vision?         |
+| SEO Value             | Does it create organic growth opportunities? |
+| Knowledge Layer Value | Does it strengthen the Word Knowledge Layer? |
+| Effort                | Is implementation effort justified?          |
 
-- Homophones.
-- Homographs.
-- Heteronyms.
-- Contronyms.
-- Oxymorons.
-- Portmanteaus.
-- Onomatopoeia.
+---
 
-## Priority 8 — Discovery Collections
+# Near-Term Candidates
 
-- Rare words.
-- Beautiful words.
-- Longest words.
-- Shortest words.
-- Difficult words.
+Potential candidates for upcoming releases.
 
-## Priority 9 — Educational Collections
+Priority:
 
-- Words by origin.
-- Borrowed words.
-- Shakespeare-invented words.
-- Words by era.
-- Kids educational word collections.
-- Learning modules.
+High
 
-## Priority 10 — Category Explorers
+---
 
-- Animals.
-- Food.
-- Nature.
-- Science.
-- Sports.
-- Geography.
-- Technology.
-- Space.
+## Enhanced Search Filters
 
-## Explicitly Out Of Scope Until Later
+Examples:
 
-- Accounts.
-- User profiles.
-- Leaderboards.
-- Social features.
-- Daily challenge mechanics before the core platform is stable.
-- Synonyms and antonyms unless they become part of a defined discovery release.
-- A database for core lookup unless JSON indexes no longer meet performance or product needs.
+* Multiple filter combinations
+* Advanced pattern matching
+* Improved word filtering
 
-## Evaluation Checklist
+Value:
 
-Before promoting any backlog item into a release plan, confirm:
+Improves search quality.
 
-1. Does it help users find or explore meaningful English words?
-2. Does it improve quality rather than merely increasing page count?
-3. Does it preserve fast response times?
-4. Does it support SEO without harming user experience?
-5. Does it fit the current platform maturity?
-6. Can it be tested against product and regression rules?
-7. Does it avoid reintroducing known regressions?
+---
+
+## Search Result Improvements
+
+Examples:
+
+* Better result ranking
+* Improved sorting
+* Enhanced word presentation
+
+Value:
+
+Improves user experience.
+
+---
+
+## Expanded Word Pages
+
+Examples:
+
+* Rich definitions
+* Usage information
+* Better navigation
+
+Value:
+
+Improves discovery.
+
+---
+
+## Related Search Suggestions
+
+Examples:
+
+* Similar searches
+* Related letter combinations
+* Common search pathways
+
+Value:
+
+Improves engagement.
+
+---
+
+# Discovery Platform Candidates
+
+Supports transition from word solver to word discovery platform.
+
+Priority:
+
+Medium
+
+---
+
+## Related Words
+
+Examples:
+
+```text
+fruit
+orchard
+pear
+banana
+```
+
+Value:
+
+Supports exploration.
+
+---
+
+## Word Families
+
+Examples:
+
+```text
+apply
+applied
+applying
+application
+```
+
+Value:
+
+Supports learning and discovery.
+
+---
+
+## Category Pages
+
+Examples:
+
+```text
+Fruit Names
+Animal Names
+Science Words
+```
+
+Value:
+
+Supports navigation and SEO.
+
+---
+
+## Popular Word Collections
+
+Examples:
+
+```text
+Common English Words
+Most Played Scrabble Words
+High Value Words
+```
+
+Value:
+
+Supports discovery.
+
+---
+
+# Word Knowledge Layer Candidates
+
+Supports long-term differentiation.
+
+Priority:
+
+Medium
+
+---
+
+## Frequency Scoring
+
+Purpose:
+
+Estimate how common a word is.
+
+---
+
+## Difficulty Scoring
+
+Purpose:
+
+Estimate how difficult a word is.
+
+---
+
+## Word Categories
+
+Purpose:
+
+Organize words into meaningful groups.
+
+---
+
+## Word Relationships
+
+Purpose:
+
+Connect words through knowledge structures.
+
+---
+
+## Ranking Signals
+
+Purpose:
+
+Improve result relevance.
+
+---
+
+# Educational Platform Candidates
+
+Supports future language learning capabilities.
+
+Priority:
+
+Medium
+
+---
+
+## Vocabulary Collections
+
+Examples:
+
+```text
+Easy Vocabulary
+Advanced Vocabulary
+Academic Vocabulary
+```
+
+---
+
+## Learning Paths
+
+Examples:
+
+```text
+Beginner
+Intermediate
+Advanced
+```
+
+---
+
+## Word Mastery Tools
+
+Examples:
+
+* Progress tracking
+* Learning recommendations
+
+---
+
+## Difficulty-Based Exploration
+
+Examples:
+
+```text
+Easy Words
+Medium Words
+Advanced Words
+```
+
+---
+
+# SEO Expansion Candidates
+
+Supports future organic growth.
+
+Priority:
+
+Medium
+
+---
+
+## Topic-Based Collections
+
+Examples:
+
+```text
+Technology Words
+Business Words
+Medical Words
+```
+
+---
+
+## Educational Word Collections
+
+Examples:
+
+```text
+SAT Vocabulary
+GRE Vocabulary
+Common English Words
+```
+
+---
+
+## Category Landing Pages
+
+Examples:
+
+```text
+Animals
+Plants
+Food
+Science
+```
+
+---
+
+## Long-Tail Search Experiences
+
+Examples:
+
+```text
+Words Starting With QU
+Words Ending With TION
+Words Containing ING
+```
+
+---
+
+# Game-Specific Opportunities
+
+Traffic opportunities.
+
+Priority:
+
+Low
+
+These features may generate traffic but do not currently represent core differentiation.
+
+---
+
+## Scrabble Helper
+
+---
+
+## Words With Friends Helper
+
+---
+
+## Wordscapes Solver
+
+---
+
+## Wordle Solver
+
+---
+
+## Boggle Helper
+
+---
+
+# Experimental Ideas
+
+Interesting concepts requiring validation.
+
+Priority:
+
+Low
+
+---
+
+## Intelligent Discovery Engine
+
+Suggest words based on:
+
+* Popularity
+* Relationships
+* Categories
+
+---
+
+## Knowledge Graph Navigation
+
+Explore relationships between words.
+
+---
+
+## Word Recommendation Engine
+
+Recommend words users may find interesting.
+
+---
+
+## Dynamic Learning Suggestions
+
+Suggest what to learn next.
+
+---
+
+## Discovery-Based Search
+
+Move beyond direct query matching.
+
+---
+
+# Deferred Ideas
+
+Not currently aligned with priorities.
+
+Review annually.
+
+---
+
+## User Accounts
+
+Reason:
+
+Not required for current objectives.
+
+---
+
+## Social Features
+
+Reason:
+
+Does not strengthen the core platform.
+
+---
+
+## User Generated Content
+
+Reason:
+
+High moderation overhead.
+
+---
+
+## Gamification
+
+Reason:
+
+Limited strategic value at current stage.
+
+---
+
+## AI Features Without Clear Value
+
+Reason:
+
+Must solve a specific user problem.
+
+---
+
+# Promotion Process
+
+Features move through the following lifecycle.
+
+```text
+Idea
+   ↓
+Feature Backlog
+   ↓
+Evaluation
+   ↓
+Roadmap
+   ↓
+Release Plan
+   ↓
+Implementation
+```
+
+---
+
+# Removal Process
+
+A feature may be removed from the backlog when:
+
+* Strategic value no longer exists
+* Better alternatives emerge
+* Implementation cost is unjustified
+* Product direction changes
+
+Removing a feature from the backlog is not considered a failure.
+
+---
+
+# Documentation Governance
+
+This document is governed by:
+
+```text
+DOCUMENTATION_MAINTENANCE_PROCESS.md
+```
+
+When new ideas emerge:
+
+* Add them here first.
+* Do not add directly to the roadmap.
+* Promote only after evaluation.
+
+---
+
+# Success Criteria
+
+The backlog succeeds when:
+
+* Ideas are captured consistently.
+* Future opportunities are not lost.
+* Roadmap decisions become easier.
+* Strategic focus is maintained.
+* Feature creep is reduced.
+
+---
+
+# Guiding Principle
+
+Not every good idea belongs on the roadmap.
+
+The backlog exists to preserve ideas while protecting focus.
+
+
+UX-001: Unscramble Tool Landing Page
+
+Status:
+Backlog
+
+Priority:
+Medium
+
+Problem:
+Users can intentionally access Words From Letters, but Unscramble does not have an equivalent landing page.
+
+Current State:
+- Homepage acts as primary unscramble entry point.
+- /unscramble/[letters] exists.
+- /unscramble does not exist.
+
+Opportunity:
+Create a dedicated Unscramble landing page with:
+- Search form
+- Tool explanation
+- Examples
+- Internal links
+
+Benefits:
+- Clearer product separation
+- Better navigation
+- Improved SEO
+- Better user understanding
+
+Target Release:
+TBD (Post Release 1.2)
