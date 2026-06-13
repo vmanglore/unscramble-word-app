@@ -265,3 +265,10 @@ Users can:
 ✅ Find common words faster
 
 ✅ Navigate large result sets efficiently on desktop and mobile
+
+
+
+Future UX Opportunities Identified During Release 1.2
+
+- Dedicated /unscramble landing page.
+- Clearer differentiation between Unscramble and Words From Letters workflows.

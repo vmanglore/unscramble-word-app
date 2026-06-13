@@ -42,3 +42,21 @@ WQ-005
 Results should be useful to humans while preserving dictionary-backed result integrity.
 
 Quality improvements must distinguish invalid/generated/non-dictionary strings from valid uncommon dictionary words.
+
+
+Temporary Display Quality Policy
+
+Until Word Knowledge Layer classification metadata exists,
+the platform may apply limited curated display filtering
+to improve Recommended Results.
+
+This filtering:
+
+- Does not affect dictionary validity.
+- Does not remove words from the source dictionary.
+- Does not affect future Rare Words support.
+- Exists solely to improve default user experience.
+
+This policy should be replaced by metadata-driven
+classification when Word Knowledge Layer capabilities
+become available.

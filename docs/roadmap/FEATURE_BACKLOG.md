@@ -552,3 +552,36 @@ The backlog succeeds when:
 Not every good idea belongs on the roadmap.
 
 The backlog exists to preserve ideas while protecting focus.
+
+
+UX-001: Unscramble Tool Landing Page
+
+Status:
+Backlog
+
+Priority:
+Medium
+
+Problem:
+Users can intentionally access Words From Letters, but Unscramble does not have an equivalent landing page.
+
+Current State:
+- Homepage acts as primary unscramble entry point.
+- /unscramble/[letters] exists.
+- /unscramble does not exist.
+
+Opportunity:
+Create a dedicated Unscramble landing page with:
+- Search form
+- Tool explanation
+- Examples
+- Internal links
+
+Benefits:
+- Clearer product separation
+- Better navigation
+- Improved SEO
+- Better user understanding
+
+Target Release:
+TBD (Post Release 1.2)

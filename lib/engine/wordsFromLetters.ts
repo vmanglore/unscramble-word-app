@@ -1,4 +1,5 @@
 import lengthRaw from "@/data/compiled/lengthMap.json";
+import { isDefaultDisplayWord } from "@/lib/engine/displayQuality";
 import {
   filterWords,
   getWordDefinition,
@@ -20,75 +21,6 @@ export type WordsFromLettersOptions = WordFinderFilters & {
 
 const lengthMap: WordMap = lengthRaw;
 const baseCache = new Map<string, string[]>();
-
-const commonTwoLetterWords = new Set([
-  "am",
-  "an",
-  "as",
-  "at",
-  "ax",
-  "be",
-  "by",
-  "do",
-  "ex",
-  "go",
-  "he",
-  "hi",
-  "if",
-  "in",
-  "is",
-  "it",
-  "me",
-  "my",
-  "no",
-  "of",
-  "oh",
-  "on",
-  "or",
-  "ox",
-  "pa",
-  "so",
-  "to",
-  "up",
-  "us",
-  "we",
-]);
-
-const lowValueShortWords = new Set([
-  "dir",
-  "dis",
-  "div",
-  "djs",
-  "drs",
-  "fdr",
-  "fri",
-  "gis",
-  "gst",
-  "hrs",
-  "idf",
-  "ifs",
-  "irs",
-  "ist",
-  "itv",
-  "rts",
-  "sd",
-  "sf",
-  "sgt",
-  "sid",
-  "sti",
-  "std",
-  "str",
-  "td",
-  "tds",
-  "thi",
-  "tis",
-  "ti",
-  "tri",
-  "ts",
-  "tvs",
-  "vhs",
-  "vis",
-]);
 
 function cleanLetters(value = "") {
   return value.toLowerCase().replace(/[^a-z]/g, "");
@@ -165,14 +97,6 @@ function getBaseWordsFromLetters(letters: string): string[] {
   return words;
 }
 
-function isDisplayableWord(word: string) {
-  if (word.length === 2) {
-    return commonTwoLetterWords.has(word);
-  }
-
-  return !lowValueShortWords.has(word);
-}
-
 export function getWordsFromLetters(
   letters = "",
   filters: WordsFromLettersOptions = {}
@@ -180,7 +104,7 @@ export function getWordsFromLetters(
   const words = getBaseWordsFromLetters(letters);
   const displayableWords = filters.includeLowValueWords
     ? words
-    : words.filter(isDisplayableWord);
+    : words.filter(isDefaultDisplayWord);
 
   return filterWords(displayableWords, filters);
 }
@@ -200,7 +124,7 @@ export function groupWordsByLength(words: string[]): WordLengthGroup[] {
     .sort(([lengthA], [lengthB]) => lengthB - lengthA)
     .map(([length, groupWords]) => ({
       length,
-      words: rankWords(groupWords),
+      words: groupWords,
     }));
 }
 

@@ -454,6 +454,96 @@ Uses:
 
 ---
 
+# Word Classification
+
+Word classification provides metadata that describes what kind of word an entry represents.
+
+Validity and classification are separate concerns.
+
+A word may be valid according to an approved dictionary source while also belonging to a specialized category.
+
+Examples:
+
+* Common English
+* Rare English
+* Foreign Language
+* Proper Name
+* Acronym
+* Abbreviation
+* Technical Term
+* Archaic Word
+
+Example:
+
+```json
+{
+  "classification": "common_english"
+}
+```
+
+Possible values:
+
+```text
+common_english
+rare_english
+foreign_language
+proper_name
+acronym
+abbreviation
+technical_term
+archaic
+```
+
+Uses:
+
+* Recommended Results
+* Rare Words View
+* Future Foreign Words View
+* Future Proper Names View
+* Future Acronym View
+* Ranking
+* Discovery
+
+---
+
+# Classification Principles
+
+The current dictionary pipeline determines validity but does not determine classification.
+
+The platform should not attempt to identify foreign-language words, proper names, acronyms, abbreviations, or other specialized categories without reliable metadata.
+
+Classification should be driven by the Word Knowledge Layer rather than hard-coded filtering rules.
+
+---
+
+# Release 1.2 Decision
+
+Foreign-word detection is out of scope for Release 1.2.
+
+The current system does not contain sufficient metadata to reliably identify foreign-language words.
+
+Recommended Results may use quality signals such as:
+
+* Frequency
+* Definition availability
+* Difficulty
+* Popularity
+* Future quality scoring
+
+Words should not be excluded solely because they appear uncommon or unfamiliar.
+
+Future classification metadata may enable dedicated result sections such as:
+
+* Recommended Results
+* Rare Words
+* Foreign Words
+* Proper Names
+* Acronyms
+
+This preserves dictionary integrity while improving user experience.
+
+---
+
 # Ranking Layer Integration
 
 The knowledge layer feeds the ranking engine.
