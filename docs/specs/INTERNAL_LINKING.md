@@ -431,6 +431,53 @@ Benefits:
 
 ---
 
+# Release 1.2 Internal Linking Foundation
+
+Release 1.2 introduces a reusable related-links component for existing supported page types.
+
+Supported page types:
+
+```text
+Homepage
+Unscramble result pages
+Words From Letters pages
+Word length pages
+Words starting with pages
+Words ending with pages
+```
+
+The foundation should generate curated links only.
+
+Current guardrails:
+
+* Link groups should remain capped and intentional.
+* Links should use crawlable Next.js `Link` navigation.
+* Link labels should be user-friendly and descriptive.
+* Links should connect existing supported routes only.
+* Pages should avoid unbounded dictionary-driven link lists.
+
+Current link targets may include:
+
+```text
+Unscramble Words
+Word Finder
+Words From Letters
+Word length pages
+Words starting with pages
+Words ending with pages
+```
+
+Deferred:
+
+* Discovery hubs
+* Word collections
+* Individual word pages
+* Knowledge-layer relationship links
+* Popular-search systems
+* Pattern collections beyond currently supported routes
+
+---
+
 # Anchor Text Rules
 
 Anchor text should be descriptive.

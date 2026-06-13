@@ -52,7 +52,11 @@ export default async function Page({ params }: Props) {
 
       {/* Related Links */}
       <div className="mt-10">
-        <RelatedLinks />
+        <RelatedLinks
+          suffix={suffix}
+          title="Browse similar words"
+          currentPath={`/words-ending-with/${suffix.toLowerCase()}`}
+        />
       </div>
     </main>
   );

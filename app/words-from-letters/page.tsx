@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedLinks from "@/components/RelatedLinks";
 import WordsFromLettersResults from "@/components/WordsFromLettersResults";
 import {
   getWordsFromLetters,
@@ -192,6 +193,12 @@ export default async function WordsFromLettersPage({ searchParams }: Props) {
             </>
           )}
         </section>
+
+        <RelatedLinks
+          letters={cleanSearchLetters}
+          title="Explore more words"
+          currentPath="/words-from-letters"
+        />
       </div>
     </main>
   );

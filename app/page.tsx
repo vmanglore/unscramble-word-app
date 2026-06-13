@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import RelatedLinks from "@/components/RelatedLinks";
 import { getSuggestions } from "@/lib/engine/autocomplete";
 import { getTrendingWords } from "@/lib/engine/trending";
 import { groupWordsByLength } from "@/lib/engine/wordsFromLetters";
@@ -379,6 +380,12 @@ export default function Page() {
             )}
           </section>
         )}
+
+        <RelatedLinks
+          letters={searchedLetters.toLowerCase() || letters}
+          title="Explore more words"
+          currentPath="/"
+        />
       </div>
     </main>
   );

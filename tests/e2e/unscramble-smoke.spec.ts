@@ -40,6 +40,13 @@ test.describe("Release 1.2 Playwright smoke coverage", () => {
 
     await groups.first().locator("summary").click();
     await expect(groups.first()).toHaveAttribute("open", "");
+
+    await expect(
+      page.getByRole("heading", { name: "Related word searches" }),
+    ).toBeVisible();
+    await page.getByRole("main").getByRole("link", { name: "5 Letter Words" }).click();
+    await expect(page).toHaveURL(/\/word-length\/5$/);
+    await expect(page.getByRole("heading", { name: "Words with 5 letters" })).toBeVisible();
   });
 
   test("TR-005 words from letters route and internal navigation remain functional", async ({
@@ -53,7 +60,7 @@ test.describe("Release 1.2 Playwright smoke coverage", () => {
     await expect(page.getByText(/Total Words Found: \d+/i)).toBeVisible();
     await expect(page.getByText(/\d+ Letter Words \(\d+\)/).first()).toBeVisible();
 
-    await page.getByRole("link", { name: "Word Finder" }).click();
+    await page.getByRole("navigation").getByRole("link", { name: "Word Finder" }).click();
     await expect(page).toHaveURL(/\/word-finder$/);
     await expect(page.getByRole("heading", { name: "Word Finder" })).toBeVisible();
 

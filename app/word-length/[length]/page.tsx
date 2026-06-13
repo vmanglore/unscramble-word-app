@@ -51,7 +51,11 @@ export default async function Page({ params }: Props) {
 
       {/* Related Links */}
       <div className="mt-10">
-        <RelatedLinks />
+        <RelatedLinks
+          length={length}
+          title="Explore more words"
+          currentPath={`/word-length/${length}`}
+        />
       </div>
     </main>
   );

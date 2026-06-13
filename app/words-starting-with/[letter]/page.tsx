@@ -53,7 +53,11 @@ export default async function Page({ params }: Props) {
 
       {/* Related Links */}
       <div className="mt-10">
-        <RelatedLinks />
+        <RelatedLinks
+          startsWith={letter}
+          title="Browse similar words"
+          currentPath={`/words-starting-with/${letter.toLowerCase()}`}
+        />
       </div>
     </main>
   );

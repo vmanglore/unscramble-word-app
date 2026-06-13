@@ -272,3 +272,9 @@ Future UX Opportunities Identified During Release 1.2
 
 - Dedicated /unscramble landing page.
 - Clearer differentiation between Unscramble and Words From Letters workflows.
+
+Internal Linking Foundation
+
+- Reusable related-links component for existing supported pages.
+- Curated links between homepage, unscramble results, Words From Letters, word length, starting-letter, and ending-pattern pages.
+- Discovery hubs, word collections, and Word Knowledge Layer links remain future work.
