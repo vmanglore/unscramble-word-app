@@ -179,3 +179,27 @@ Automated browser testing supports:
 * Better regression detection
 
 This capability becomes increasingly valuable as the platform evolves beyond simple word generation into a larger word discovery and knowledge platform.
+
+
+---
+
+# Related Research
+
+See:
+
+RELEASE_1_2_TASK_XX_PLAYWRIGHT_ACCESS_AUDIT.md
+
+Summary:
+
+- Playwright CLI verified
+- Playwright version 1.60.0 detected
+- Browser binaries verified
+- Browser launch verified
+- Headless screenshots verified
+- Local Next.js page testing verified
+
+Important Limitation:
+
+Playwright is currently installed locally but is not declared in package.json and is not part of the repository's official testing infrastructure.
+
+Implementation of this task should formalize Playwright as a project dependency and establish repository-level browser testing standards.
