@@ -207,3 +207,31 @@ When an audit identifies that a limitation is caused by missing architecture or 
 Example:
 
 * Missing word classification metadata should be addressed through the Word Knowledge Layer rather than hard-coded classification rules.
+
+
+## Research Documents
+
+Research documents in `docs/research/` may inform planning, but they are not implementation source of truth unless explicitly promoted.
+
+Codex may review research documents for context, but must not implement directly from them unless a task document, roadmap item, or release plan references the research and defines scope.
+
+Examples:
+
+- `docs/research/ROADMAP_BACKLOG_ENHANCEMENTS_V01.md`
+- competitor research notes
+- monetization research notes
+- navigation research notes
+
+Required workflow:
+
+Research Idea
+  ↓
+Feature Backlog
+  ↓
+Evaluation
+  ↓
+Roadmap / Release Plan
+  ↓
+Task Document
+  ↓
+Implementation

@@ -554,7 +554,9 @@ Not every good idea belongs on the roadmap.
 The backlog exists to preserve ideas while protecting focus.
 
 
-UX-001: Unscramble Tool Landing Page
+# Landng Page
+
+UX-001: Unscramble Discovery Hub
 
 Status:
 Backlog
@@ -584,7 +586,7 @@ Benefits:
 - Better user understanding
 
 Target Release:
-TBD (Post Release 1.2)
+Post Release 1.2
 
 
 TEST-001: Playwright Testing Foundation
@@ -592,13 +594,15 @@ TEST-001: Playwright Testing Foundation
 Priority: Medium
 
 Purpose:
-Introduce automated browser testing using Playwright.
+Create a dedicated Unscramble destination that combines
+search, education, discovery, and internal navigation.
 
 Benefits:
-- End-to-end testing
-- Mobile viewport validation
-- Regression detection
-- Reduced manual testing
+- Better SEO
+- Better navigation
+- Better discovery
+- Supports future Word Knowledge Layer
+- Supports future WordNavic transition
 
 Potential Coverage:
 - Homepage search

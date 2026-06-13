@@ -109,6 +109,20 @@ Examples:
 
 ---
 
+## Objective 5
+
+Increase discovery pathways.
+
+Examples:
+
+Internal linking
+Collections
+Categories
+Word patterns
+Topic navigation
+
+---
+
 # Phase 1
 
 ## Foundation
@@ -246,6 +260,11 @@ Introduce word exploration and discovery.
 * Popular words
 * Better navigation
 * Improved ranking engine
+* Word collections
+* Category pages
+* Discovery hubs
+* Word pattern navigation
+
 
 ---
 
@@ -412,6 +431,10 @@ Expand beyond word solving.
 * Difficulty groupings
 * Educational content
 * Word mastery tools
+* Kids vocabulary
+* Academic vocabulary
+* Game-oriented learning
+* Topic-based vocabulary
 
 ---
 
