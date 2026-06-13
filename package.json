@@ -8,6 +8,7 @@
     "build:dictionary": "ts-node scripts/buildIndex.ts",
     "start": "next start",
     "lint": "eslint",
+    "test:e2e": "playwright test",
     "test": "cross-env TS_NODE_TRANSPILE_ONLY=true TS_NODE_PROJECT=tests/tsconfig.json node --test --require ts-node/register --require ./tests/registerPathAlias.cjs tests/*.test.ts"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
