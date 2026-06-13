@@ -9,6 +9,14 @@ release-1.2-collapsible-results
 Task:
 Collapsible Result Sections
 
+Status:
+Completed
+
+Merged into:
+release-1.2-planning
+
+Completion Date: 12-Jun-2026
+
 Goal:
 
 Improve usability of grouped search results by allowing users to expand and collapse result groups.
