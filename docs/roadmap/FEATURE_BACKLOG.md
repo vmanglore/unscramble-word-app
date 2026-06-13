@@ -585,3 +585,27 @@ Benefits:
 
 Target Release:
 TBD (Post Release 1.2)
+
+
+TEST-001: Playwright Testing Foundation
+
+Priority: Medium
+
+Purpose:
+Introduce automated browser testing using Playwright.
+
+Benefits:
+- End-to-end testing
+- Mobile viewport validation
+- Regression detection
+- Reduced manual testing
+
+Potential Coverage:
+- Homepage search
+- Unscramble results
+- Words From Letters
+- Result grouping
+- Collapsible sections
+
+Status:
+Planned

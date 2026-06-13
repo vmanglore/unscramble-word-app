@@ -70,14 +70,20 @@ export default async function Page({ params }: Props) {
             <p className="text-slate-500">No words found.</p>
           ) : (
             <div className="space-y-6">
-              {groups.map((group) => (
-                <section
+              {groups.map((group, index) => (
+                <details
                   key={group.length}
-                  className="border-t border-slate-200 pt-5 first:border-t-0 first:pt-0"
+                  open={index === 0}
+                  className="group border-t border-slate-200 pt-5 first:border-t-0 first:pt-0"
                 >
-                  <h3 className="mb-3 text-lg font-semibold text-slate-900">
-                    {group.length} Letter Words ({group.words.length})
-                  </h3>
+                  <summary className="mb-3 cursor-pointer list-none rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      <span className="mr-2 inline-block text-slate-500 transition group-open:rotate-90">
+                        &gt;
+                      </span>
+                      {group.length} Letter Words ({group.words.length})
+                    </h3>
+                  </summary>
 
                   <div className="flex flex-wrap gap-2 sm:gap-3">
                     {group.words.map((word) => (
@@ -89,7 +95,7 @@ export default async function Page({ params }: Props) {
                       </span>
                     ))}
                   </div>
-                </section>
+                </details>
               ))}
             </div>
           )}

@@ -18,22 +18,29 @@ export default function WordsFromLettersResults({
 
   return (
     <div className="space-y-6">
-      {groups.map((group) => (
-        <section key={group.length} className="border-t border-slate-200 pt-5 first:border-t-0 first:pt-0">
-          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+      {groups.map((group, index) => (
+        <details
+          key={group.length}
+          open={index === 0}
+          className="group border-t border-slate-200 pt-5 first:border-t-0 first:pt-0"
+        >
+          <summary className="mb-3 cursor-pointer list-none rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
             <h2 className="text-xl font-semibold text-slate-900">
+              <span className="mr-2 inline-block text-slate-500 transition group-open:rotate-90">
+                &gt;
+              </span>
               {group.length} Letter Words ({group.words.length})
             </h2>
+          </summary>
 
-            {showLengthLinks && (
-              <Link
-                href={`/words-from-letters/${letters}?length=${group.length}`}
-                className="text-sm font-medium text-blue-600 hover:underline"
-              >
-                View {group.length} letter words
-              </Link>
-            )}
-          </div>
+          {showLengthLinks && (
+            <Link
+              href={`/words-from-letters/${letters}?length=${group.length}`}
+              className="mb-3 inline-block text-sm font-medium text-blue-600 hover:underline"
+            >
+              View {group.length} letter words
+            </Link>
+          )}
 
           <div className="flex flex-wrap gap-2">
             {group.words.map((word) => (
@@ -46,7 +53,7 @@ export default function WordsFromLettersResults({
               </Link>
             ))}
           </div>
-        </section>
+        </details>
       ))}
     </div>
   );
